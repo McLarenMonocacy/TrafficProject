@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TransitMap {
+    //TODO: add tests
 
     private final List<TransitNode> nodes;
 
@@ -43,28 +44,26 @@ public class TransitMap {
     }
 
 
-    private class CalcPathClass{
-        private List<String> path = null;
-        private float pathTime = 0;
+    private static class CalcPathClass{ // Could use a better name
+        private final List<String> path;
+        private float pathTime;
 
         public CalcPathClass(){
-
+            this.path = new LinkedList<>();
+            this.pathTime = 0;
         }
         public CalcPathClass(CalcPathClass calcPath){
             this.path = new LinkedList<>(calcPath.path);
             this.pathTime = calcPath.pathTime;
         }
         public void addNodeToPath(String nodeID, float connectionTime){
-            if (path == null){
-                path = new LinkedList<>();
-                pathTime = 0;
-            }
             path.add(nodeID);
             pathTime += connectionTime;
         }
     }
 
     public Map<String,Map<String,List<String>>> genPathTables(){
+        //TODO: store each table in their respective TransitNode
         Map<String, Map<String, List<String>>> pathTables = new HashMap<>(); //Table holding tables
         for (TransitNode startNode : nodes){
             Map<String, List<String>> traveTable = new HashMap<>(); //Table holding travel Destinations
@@ -101,7 +100,7 @@ public class TransitMap {
                 continue; // Skip the node
             }
             CalcPathClass nextPath = new CalcPathClass(currentPath);
-            nextPath.addNodeToPath(connection.getConnectedNode().getID(), connection.getTime());
+            nextPath.addNodeToPath(connection.getConnectedNode().getID(), connection.getTravelTime());
             if (connection.getConnectedNode().getID().equals(targetNodeID)){ //Check if the node we are checking is the destination
                 return nextPath; //Return the valid path
             }
@@ -110,7 +109,6 @@ public class TransitMap {
             if (shortestPath == null) shortestPath = calcPath; //There is not currently a valid path so set it to the found valid path
             else if (calcPath.pathTime < shortestPath.pathTime) shortestPath = calcPath; //The found valid path is shorter than the previous valid path
         }
-        if (shortestPath == null) return null;
         return shortestPath;
     }
 
@@ -130,7 +128,7 @@ public class TransitMap {
                 builder.append(",");
                 builder.append(connection.getDistance());
                 builder.append(",");
-                builder.append(connection.getTime());
+                builder.append(connection.getTravelTime());
                 builder.append(",");
             }
             builder.append("\n");
