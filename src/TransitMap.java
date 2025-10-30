@@ -34,6 +34,14 @@ public class TransitMap {
         return nodes;
     }
 
+    public TransitNode getNode(String nodeID){
+        //Returns a node matching the nodeID, null if non is found
+        for (TransitNode node : nodes){
+            if (nodeID.equals(node.getID())) return node;
+        }
+        return null;
+    }
+
 
     private class CalcPathClass{
         private List<String> path = null;
@@ -81,10 +89,10 @@ public class TransitMap {
         //This function should return a valid path to a targetNode or null if it finds a dead-end
 
         CalcPathClass shortestPath = null;
-        for (TransitNode nextNode : currentNode.getConnections()){
+        for (TransitConnection connection : currentNode.getConnections()){
             boolean inPath = false;
             for (String nodeID : currentPath.path){
-                if (nodeID.equals(nextNode.getID())){
+                if (nodeID.equals(connection.getConnectedNode().getID())){
                     inPath = true;
                     break;
                 }
@@ -93,11 +101,11 @@ public class TransitMap {
                 continue; // Skip the node
             }
             CalcPathClass nextPath = new CalcPathClass(currentPath);
-            nextPath.addNodeToPath(nextNode.getID(), nextNode.getTime(currentNode.getID()));
-            if (nextNode.getID().equals(targetNodeID)){ //Check if the node we are checking is the destination
+            nextPath.addNodeToPath(connection.getConnectedNode().getID(), connection.getTime());
+            if (connection.getConnectedNode().getID().equals(targetNodeID)){ //Check if the node we are checking is the destination
                 return nextPath; //Return the valid path
             }
-            CalcPathClass calcPath = calcShortestPath(nextPath, nextNode, targetNodeID);
+            CalcPathClass calcPath = calcShortestPath(nextPath, connection.getConnectedNode(), targetNodeID);
             if (calcPath == null) continue; //The node we are checking only contains dead ends thus this node is a dead end
             if (shortestPath == null) shortestPath = calcPath; //There is not currently a valid path so set it to the found valid path
             else if (calcPath.pathTime < shortestPath.pathTime) shortestPath = calcPath; //The found valid path is shorter than the previous valid path
@@ -107,11 +115,46 @@ public class TransitMap {
     }
 
 
-    public void saveNodes(){
-
+    public String saveNodes(){
+        StringBuilder builder = new StringBuilder();
+        for (TransitNode node : nodes){
+            builder.append(node.getID());
+            builder.append(",");
+        }
+        builder.append("\n");
+        for (TransitNode node : nodes){
+            builder.append(node.getID());
+            builder.append(",");
+            for (TransitConnection connection : node.getConnections()){
+                builder.append(connection.getConnectedNode().getID());
+                builder.append(",");
+                builder.append(connection.getDistance());
+                builder.append(",");
+                builder.append(connection.getTime());
+                builder.append(",");
+            }
+            builder.append("\n");
+        }
+        return builder.toString();
     }
-    public void loadNodes(String dataPath){
-
+    public static TransitMap loadNodes(String data){
+        TransitMap outputMap = new TransitMap();
+        String[] dataBits = data.split("\n");
+        String[] firstLine = dataBits[0].split(",");
+        for (String string : firstLine){
+            outputMap.addNode(new TransitNode(string));
+        }
+        for (int i = 1; i < dataBits.length; i++) {
+            String[] line = dataBits[i].split(",");
+            TransitNode lineNode = outputMap.getNode(line[0]);
+            for (int j = 3; j < line.length; j += 3) {
+                String connectedNodeID = line[j-2];
+                float distance = Float.parseFloat(line[j-1]);
+                float time = Float.parseFloat(line[j]);
+                outputMap.addConnection(lineNode, outputMap.getNode(connectedNodeID),distance,time);
+            }
+        }
+        return outputMap;
     }
 
 
