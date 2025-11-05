@@ -1,6 +1,5 @@
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 public class TransitNode {
     public TransitNode (String id){
@@ -14,7 +13,7 @@ public class TransitNode {
 
 
     public boolean addConnection(TransitNode node, float distance, float time){
-        connectionList.add( new TransitNode.TransitConnection( node.id, distance, time));
+        connectionList.add( new TransitConnection( node.id, distance, time));
         return true;
     }
 
@@ -26,10 +25,10 @@ public class TransitNode {
          */
     }
 
-    public String getTransitNodeId(){
+    public String getID(){
         return id;
     }
-    public List< TransitConnection > getConnectedNodes(){
+    public List< TransitConnection > getConnections(){
         return connectionList;
     }
 }
