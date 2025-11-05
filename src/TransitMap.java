@@ -15,7 +15,7 @@ public class TransitMap {
     public boolean addNode (TransitNode node){
 
         for (TransitNode n : nodes){
-            if (n.getID().equals(node.getID())){
+            if (n.getTransitNodeId().equals(node.getTransitNodeId())){
                 return false;
             }
         }
@@ -38,7 +38,7 @@ public class TransitMap {
     public TransitNode getNode(String nodeID){
         //Returns a node matching the nodeID, null if non is found
         for (TransitNode node : nodes){
-            if (nodeID.equals(node.getID())) return node;
+            if (nodeID.equals(node.getTransitNodeId())) return node;
         }
         return null;
     }

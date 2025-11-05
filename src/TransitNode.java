@@ -11,18 +11,7 @@ public class TransitNode {
     List< TransitConnection > connectionList;
     Map< String, List< String > > travelTable;
 
-    private static class TransitConnection{
-        public TransitConnection( String id, float distance, float time ){
-            id = this.idOfConnectedNode;
-            distance = this.distance;
-            time = this.time;
-        }
 
-        Queue<Commuter>transitConnection;
-        String idOfConnectedNode;
-        float distance;
-        int time;
-    }
 
     public boolean addConnection(TransitNode node, float distance, float time){
         connectionList.add( new TransitNode.TransitConnection( node.id, distance, time));
