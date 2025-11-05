@@ -1,31 +1,24 @@
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 public class TransitNode {
     public TransitNode (String id){
-        id = this.id;
+        this.id = id;
+        connectionList = new LinkedList<>();
     }
 
-    String id;
-    List< TransitConnection > connectionList;
-    Map< String, List< String > > travelTable;
+    private final String id;
+    private final List< TransitConnection > connectionList;
+    private Map<String, List<String>> travelTable;
 
-    private static class TransitConnection{
-        public TransitConnection( String id, float distance, float time ){
-            id = this.idOfConnectedNode;
-            distance = this.distance;
-            time = this.time;
-        }
 
-        Queue<Commuter>transitConnection;
-        String idOfConnectedNode;
-        float distance;
-        int time;
-    }
 
     public boolean addConnection(TransitNode node, float distance, float time){
-        connectionList.add( new TransitNode.TransitConnection( node.id, distance, time));
+        for (TransitConnection connection : connectionList){
+            if (node.getID().equals(connection.getConnectedNode().getID())) return false;
+        }
+        connectionList.add( new TransitConnection( node, distance, time));
         return true;
     }
 
@@ -37,11 +30,15 @@ public class TransitNode {
          */
     }
 
-    public String getTransitNodeId(){
+    public String getID(){
         return id;
     }
-    public List< TransitConnection > getConnectedNodes(){
+    public List< TransitConnection > getConnections(){
         return connectionList;
+    }
+
+    public void setTravelTable(Map<String, List<String>> travelTable){
+        this.travelTable = travelTable;
     }
 }
 
