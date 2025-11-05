@@ -39,4 +39,8 @@ public class TransitConnection {
 
         connectedNode.receiveCommuters(vehicle);
     }
+
+    public void addToQueue(Commuter commuter){
+        exitQueue.offer(commuter);
+    }
 }
