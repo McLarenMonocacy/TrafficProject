@@ -4,6 +4,27 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
 
+        TransitMap map = getTransitMap();
+
+
+        Map<String, Map<String, List<String>>> pathTables = map.genPathTables();
+        for (TransitNode node : map.getNodes()){
+            System.out.println(pathTables.get(node.getID()));
+        }
+        String savaData = map.saveNodes();
+
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+        TransitMap newMap = TransitMap.loadNodes(savaData);
+        Map<String, Map<String, List<String>>> newPathTables = map.genPathTables();
+        for (TransitNode node : newMap.getNodes()){
+            System.out.println(newPathTables.get(node.getID()));
+        }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println(pathTables.equals(newPathTables));
+    }
+
+    private static TransitMap getTransitMap() {
         TransitNode node1 = new TransitNode("1");
         TransitNode node2 = new TransitNode("2");
         TransitNode node3 = new TransitNode("3");
@@ -28,23 +49,6 @@ public class Main {
         map.addConnection(node4,node5,1f,1f);
         map.addConnection(node4,node6,1f,1f);
         map.addConnection(node5,node6,1f,1f);
-
-
-        Map<String, Map<String, List<String>>> pathTables = map.genPathTables();
-        System.out.println(pathTables);
-        for (TransitNode node : map.getNodes()){
-            System.out.println(pathTables.get(node.getID()));
-        }
-        String savaData = map.saveNodes();
-
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
-        TransitMap newMap = TransitMap.loadNodes(savaData);
-        Map<String, Map<String, List<String>>> newPathTables = map.genPathTables();
-        for (TransitNode node : newMap.getNodes()){
-            System.out.println(newPathTables.get(node.getID()));
-        }
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println(pathTables.equals(newPathTables));
+        return map;
     }
 }
