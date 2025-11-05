@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 import java.util.Map;
 
@@ -95,6 +97,15 @@ class TransitMapTest {
             assertTrue(hasNode, "Node in original map does not exist after saving and loading");
         }
             
+    }
+
+    @Test
+    void testGenPathTables(){
+        TransitMap map = getTransitMap();
+        Map<String, Map<String, List<String>>> pathTables = map.genPathTables();
+
+        String expected = "{1={2=[1, 2], 3=[1, 3], 4=[1, 3, 4], 5=[1, 3, 4, 5], 6=[1, 3, 4, 6]}, 2={1=[2, 1], 3=[2, 3], 4=[2, 3, 4], 5=[2, 3, 4, 5], 6=[2, 6]}, 3={1=[3, 1], 2=[3, 2], 4=[3, 4], 5=[3, 4, 5], 6=[3, 4, 6]}, 4={1=[4, 3, 1], 2=[4, 3, 2], 3=[4, 3], 5=[4, 5], 6=[4, 6]}, 5={1=[5, 4, 3, 1], 2=[5, 4, 3, 2], 3=[5, 4, 3], 4=[5, 4], 6=[5, 6]}, 6={1=[6, 4, 3, 1], 2=[6, 2], 3=[6, 4, 3], 4=[6, 4], 5=[6, 5]}}";
+        assertEquals(expected, pathTables.toString());
     }
 
     private static TransitMap getTransitMap() {
