@@ -18,7 +18,7 @@ public class Main {
         TransitMap newMap = TransitMap.loadNodes(savaData);
         Map<String, Map<String, List<String>>> newPathTables = map.genPathTables();
         for (TransitNode node : newMap.getNodes()){
-            System.out.println(newPathTables.get(node.getID()));
+            System.out.println(node.getID() + ":" + newPathTables.get(node.getID()));
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println(pathTables.equals(newPathTables));
