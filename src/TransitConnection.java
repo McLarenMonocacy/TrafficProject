@@ -31,15 +31,14 @@ public class TransitConnection {
 
     public void departVehicle(){
         TransitVehicle vehicle = new TransitVehicle(5);
-        for (int i = 0; i < exitQueue.size(); i++) {
-            Commuter commuterToAdd = exitQueue.peek();
+        Commuter commuterToAdd = exitQueue.peek();
+        while (commuterToAdd != null) {
             if (vehicle.addPassenger(commuterToAdd)){
                 exitQueue.poll();
+                commuterToAdd = exitQueue.peek();
             }
+            else break;
         }
-
-
-
         connectedNode.receiveCommuters(vehicle);
     }
 
