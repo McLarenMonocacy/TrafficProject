@@ -15,16 +15,16 @@ public class ArrivalProcess {
         this.nextArrivalTime = 0.0;
     }
 
-    public Commuter generateNextCommuter() {
-        // Get the time for this arrival event
-        double arrivalEventTime = this.nextArrivalTime;
-
-        // Calculate the next arrival time
-        this.nextArrivalTime = arrivalEventTime + distribution.sample();
-
-
-        return new Commuter(this.destination, (float)arrivalEventTime);
-    }
+//    public Commuter generateNextCommuter() {
+//        // Get the time for this arrival event
+//        double arrivalEventTime = this.nextArrivalTime;
+//
+//        // Calculate the next arrival time
+//        this.nextArrivalTime = arrivalEventTime + distribution.sample();
+//
+//
+//        return new Commuter(this.destination, (float)arrivalEventTime);
+//    }
 
     public double getNextArrivalTime() {
         return this.nextArrivalTime;
