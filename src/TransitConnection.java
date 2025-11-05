@@ -25,11 +25,6 @@ public class TransitConnection {
         return connectedNode;
     }
 
-    public void addToQueue(Commuter commuter){
-        exitQueue.offer(commuter);
-    }
-
-
     public void departVehicle(){
         TransitVehicle vehicle = new TransitVehicle(5);
         for (int i = 0; i < exitQueue.size(); i++) {
@@ -42,5 +37,9 @@ public class TransitConnection {
 
 
         connectedNode.receiveCommuters(vehicle);
+    }
+
+    public void addToQueue(Commuter commuter){
+        exitQueue.offer(commuter);
     }
 }
