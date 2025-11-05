@@ -7,7 +7,7 @@ public class TransitConnection {
         this.time = time;
     }
 
-    Queue<Commuter> transitConnection;
+    Queue<Commuter> exitQueue;
     private final TransitNode connectedNode;
     private final float distance;
     private final float time;
@@ -23,5 +23,20 @@ public class TransitConnection {
 
     public TransitNode getConnectedNode() {
         return connectedNode;
+    }
+
+
+    public void departVehicle(){
+        TransitVehicle vehicle = new TransitVehicle(5);
+        for (int i = 0; i < exitQueue.size(); i++) {
+            Commuter commuterToAdd = exitQueue.peek();
+            if (vehicle.addPassenger(commuterToAdd)){
+                exitQueue.poll();
+            }
+        }
+
+
+
+        connectedNode.receiveCommuters(vehicle);
     }
 }
