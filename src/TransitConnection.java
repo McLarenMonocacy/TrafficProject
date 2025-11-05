@@ -7,7 +7,7 @@ public class TransitConnection {
         this.time = time;
     }
 
-    Queue<Commuter> transitConnection;
+    Queue<Commuter> exitQueue;
     private final TransitNode connectedNode;
     private final float distance;
     private final float time;
@@ -23,5 +23,9 @@ public class TransitConnection {
 
     public TransitNode getConnectedNode() {
         return connectedNode;
+    }
+
+    public void addToQueue(Commuter commuter){
+        exitQueue.offer(commuter);
     }
 }
