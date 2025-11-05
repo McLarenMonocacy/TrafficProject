@@ -24,6 +24,9 @@ public class TransitConnection {
     public TransitNode getConnectedNode() {
         return connectedNode;
     }
+    public void addToQueue(Commuter commuter){
+        exitQueue.offer(commuter);
+    }
 
 
     public void departVehicle(){
@@ -40,7 +43,4 @@ public class TransitConnection {
         connectedNode.receiveCommuters(vehicle);
     }
 
-    public void addToQueue(Commuter commuter){
-        exitQueue.offer(commuter);
-    }
 }
