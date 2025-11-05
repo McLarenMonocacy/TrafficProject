@@ -1,16 +1,16 @@
 import java.util.Queue;
 
 public class TransitConnection {
-    public TransitConnection( String id, float distance, float time ){
-        this.idOfConnectedNode = id;
+    public TransitConnection( TransitNode connectedNode, float distance, float time ){
+        this.connectedNode = connectedNode;
         this.distance = distance;
         this.time = time;
     }
 
     Queue<Commuter> transitConnection;
-    private String idOfConnectedNode;
-    private float distance;
-    private float time;
+    private final TransitNode connectedNode;
+    private final float distance;
+    private final float time;
 
 
     public float getDistance() {
@@ -21,7 +21,7 @@ public class TransitConnection {
         return time;
     }
 
-    public String getConnectedNode() {
-        return idOfConnectedNode;
+    public TransitNode getConnectedNode() {
+        return connectedNode;
     }
 }
