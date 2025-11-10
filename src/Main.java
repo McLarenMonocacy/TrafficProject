@@ -9,16 +9,18 @@ public class Main {
 
         Map<String, Map<String, List<String>>> pathTables = map.genPathTables();
         for (TransitNode node : map.getNodes()){
-            System.out.println(pathTables.get(node.getID()));
+            System.out.println(node.getID() + ":" + pathTables.get(node.getID()));
+            System.out.println(node.getID() + ":" + node.getTravelTable());
         }
         String savaData = map.saveNodes();
 
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
         TransitMap newMap = TransitMap.loadNodes(savaData);
-        Map<String, Map<String, List<String>>> newPathTables = map.genPathTables();
+        Map<String, Map<String, List<String>>> newPathTables = newMap.genPathTables();
         for (TransitNode node : newMap.getNodes()){
             System.out.println(node.getID() + ":" + newPathTables.get(node.getID()));
+            System.out.println(node.getID() + ":" + node.getTravelTable());
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println(pathTables.equals(newPathTables));

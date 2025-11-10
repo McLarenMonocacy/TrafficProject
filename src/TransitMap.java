@@ -66,12 +66,13 @@ public class TransitMap {
         //TODO: store each table in their respective TransitNode
         Map<String, Map<String, List<String>>> pathTables = new HashMap<>(); //Table holding tables
         for (TransitNode startNode : nodes){
-            Map<String, List<String>> traveTable = new HashMap<>(); //Table holding travel Destinations
+            Map<String, List<String>> travelTable = new HashMap<>(); //Table holding travel Destinations
             for (TransitNode destNode : nodes){
                 if (startNode.getID().equals(destNode.getID())) continue;
-                traveTable.put(destNode.getID(),calcShortestPath(startNode, destNode.getID()));
+                travelTable.put(destNode.getID(),calcShortestPath(startNode, destNode.getID()));
             }
-            pathTables.put(startNode.getID(), traveTable);
+            startNode.setTravelTable(travelTable); // store the travel table in the node
+            pathTables.put(startNode.getID(), travelTable);
         }
         return pathTables;
     }
