@@ -1,27 +1,37 @@
+import java.util.LinkedList;
+import java.util.List;
+
 // Manages arrival of Commuters at a specific transit node
 public class ArrivalProcess {
     private ExponentialDistribution distribution;
-    private double nextArrivalTime;
-    private String sourceNodeID; // Where commuters arrive
-    private String destinationNodeID; // Where they want to go
+    private float nextArrivalTime;
+    private final TransitMap transitMap;
+    private List<TransitNode> nodes;
 
     // Constructor with arrival rate and node IDs
-    public ArrivalProcess(double lambda, String sourceNodeID, String destinationNodeID) {
+    public ArrivalProcess(double lambda, TransitMap map) {
         this.distribution = new ExponentialDistribution(lambda);
-        this.sourceNodeID = sourceNodeID;
-        this.destinationNodeID = destinationNodeID;
-        this.nextArrivalTime = 0.0; // First arrival at time 0
+        this.transitMap = map;
+        genNodeList();
+        this.nextArrivalTime = 0.0f; // First arrival at time 0
     }
 
     // Generate next commuter and update next arrival time
-    public Commuter generateNextCommuter() {
-        double currentArrival = this.nextArrivalTime;
+    public void generateNextCommuter() {
 
-        // Schedule next arrival
-        this.nextArrivalTime = currentArrival + distribution.sample();
+        TransitNode startNode = nodes.get(randIndex());
+        TransitNode endNode = nodes.get(randIndex());
+        while (startNode.getID().equals(endNode.getID())){
+            //If the start and end nodes are the same reroll the end node
+            endNode = nodes.get(randIndex());
+        }
 
-        // Create and return new commuter
-        return new Commuter(this.destinationNodeID, (float)currentArrival);
+        Commuter newCommuter = new Commuter(endNode.getID(), nextArrivalTime);
+        TransitVehicle roboTaxi = new TransitVehicle(1);
+        roboTaxi.addPassenger(newCommuter);
+        startNode.receiveCommuters(roboTaxi);
+
+        nextArrivalTime += distribution.sample();
     }
 
     // Get when next arrival will occur
@@ -29,18 +39,18 @@ public class ArrivalProcess {
         return this.nextArrivalTime;
     }
 
-    // Get where commuters arrive
-    public String getSourceNodeID() {
-        return this.sourceNodeID;
-    }
-
-    // Get where commuters want to go
-    public String getDestinationNodeID() {
-        return this.destinationNodeID;
-    }
-
     // Advance to next arrival without generating commuter
     public void advanceArrival() {
+        //TODO: what is the purpose of this function
         this.nextArrivalTime += distribution.sample();
     }
+
+    private void genNodeList(){
+        nodes = transitMap.getNodes();
+    }
+
+    private int randIndex(){
+        return (int) Math.round(Math.floor((Math.random()*nodes.size())/(nodes.size())));
+    }
+
 }
