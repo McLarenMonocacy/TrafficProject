@@ -23,11 +23,15 @@ public class TransitNode {
     }
 
     public void receiveCommuters( TransitVehicle vehicle ){
-        /* while vehicle is not empty
-        remove a commuter (Idk in what data structure the commuters in the vehicle will be stored )
-        check his transitConnection
-        place commuter in the appropriate transitConnect queue
-         */
+        Commuter commuter = null;
+         while ( (commuter = vehicle.removePassenger()) != null ){
+             String nextStop = travelTable.get( commuter.getDestination() ).get(1);
+            for ( TransitConnection connection : connectionList){
+                if ( nextStop.equals( connection.getConnectedNode().id ) ){
+                    connection.transitConnection.add( commuter );
+                }
+            }
+        }
     }
 
     public String getID(){
