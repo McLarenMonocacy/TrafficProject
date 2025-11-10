@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 public class TransitMap {
-    //TODO: add tests
 
     private final List<TransitNode> nodes;
 
@@ -13,7 +12,6 @@ public class TransitMap {
     }
 
     public boolean addNode (TransitNode node){
-
         for (TransitNode n : nodes){
             if (n.getID().equals(node.getID())){
                 return false;
@@ -63,7 +61,6 @@ public class TransitMap {
     }
 
     public Map<String,Map<String,List<String>>> genPathTables(){
-        //TODO: store each table in their respective TransitNode
         Map<String, Map<String, List<String>>> pathTables = new HashMap<>(); //Table holding tables
         for (TransitNode startNode : nodes){
             Map<String, List<String>> travelTable = new HashMap<>(); //Table holding travel Destinations
