@@ -36,7 +36,9 @@ public class TransitNode {
     public List< TransitConnection > getConnections(){
         return connectionList;
     }
-
+    public Map<String, List<String>> getTravelTable(){
+        return travelTable;
+    }
     public void setTravelTable(Map<String, List<String>> travelTable){
         this.travelTable = travelTable;
     }

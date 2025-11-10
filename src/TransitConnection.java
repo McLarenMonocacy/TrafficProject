@@ -25,6 +25,19 @@ public class TransitConnection {
         return connectedNode;
     }
 
+    public void departVehicle(){
+        TransitVehicle vehicle = new TransitVehicle(5);
+        Commuter commuterToAdd = exitQueue.peek();
+        while (commuterToAdd != null) {
+            if (vehicle.addPassenger(commuterToAdd)){
+                exitQueue.poll();
+                commuterToAdd = exitQueue.peek();
+            }
+            else break;
+        }
+        connectedNode.receiveCommuters(vehicle);
+    }
+
     public void addToQueue(Commuter commuter){
         exitQueue.offer(commuter);
     }
