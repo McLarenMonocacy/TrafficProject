@@ -1,32 +1,46 @@
-// Manages the creation of new Commuters based on an arrival rate.
+// Manages arrival of Commuters at a specific transit node
 public class ArrivalProcess {
-
     private ExponentialDistribution distribution;
-
     private double nextArrivalTime;
+    private String sourceNodeID; // Where commuters arrive
+    private String destinationNodeID; // Where they want to go
 
-    private String destination;
-
-    public ArrivalProcess(double lambda, String destination) {
+    // Constructor with arrival rate and node IDs
+    public ArrivalProcess(double lambda, String sourceNodeID, String destinationNodeID) {
         this.distribution = new ExponentialDistribution(lambda);
-        this.destination = destination;
-
-        // Start the simulation at time 0 with the first arrival
-        this.nextArrivalTime = 0.0;
+        this.sourceNodeID = sourceNodeID;
+        this.destinationNodeID = destinationNodeID;
+        this.nextArrivalTime = 0.0; // First arrival at time 0
     }
 
-//    public Commuter generateNextCommuter() {
-//        // Get the time for this arrival event
-//        double arrivalEventTime = this.nextArrivalTime;
-//
-//        // Calculate the next arrival time
-//        this.nextArrivalTime = arrivalEventTime + distribution.sample();
-//
-//
-//        return new Commuter(this.destination, (float)arrivalEventTime);
-//    }
+    // Generate next commuter and update next arrival time
+    public Commuter generateNextCommuter() {
+        double currentArrival = this.nextArrivalTime;
 
+        // Schedule next arrival
+        this.nextArrivalTime = currentArrival + distribution.sample();
+
+        // Create and return new commuter
+        return new Commuter(this.destinationNodeID, (float)currentArrival);
+    }
+
+    // Get when next arrival will occur
     public double getNextArrivalTime() {
         return this.nextArrivalTime;
+    }
+
+    // Get where commuters arrive
+    public String getSourceNodeID() {
+        return this.sourceNodeID;
+    }
+
+    // Get where commuters want to go
+    public String getDestinationNodeID() {
+        return this.destinationNodeID;
+    }
+
+    // Advance to next arrival without generating commuter
+    public void advanceArrival() {
+        this.nextArrivalTime += distribution.sample();
     }
 }
