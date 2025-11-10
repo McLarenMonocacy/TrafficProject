@@ -12,6 +12,7 @@ public class TransitMap {
     }
 
     public boolean addNode (TransitNode node){
+        // Check that a node of the same ID isn't already in the map
         for (TransitNode n : nodes){
             if (n.getID().equals(node.getID())){
                 return false;
@@ -22,6 +23,18 @@ public class TransitMap {
     }
 
     public boolean addConnection(TransitNode node1, TransitNode node2, float distance, float time){
+        boolean node1Exists = false;
+        boolean node2Exists = false;
+
+        for (TransitNode node : nodes){
+            // Check that both nodes are in the map first
+            if (!node1Exists && node.getID().equals(node1.getID())) node1Exists = true;
+            if (!node2Exists && node.getID().equals(node2.getID())) node2Exists = true;
+
+            if (node1Exists && node2Exists) break;
+        }
+        if (!node2Exists || !node1Exists) return false;
+
         boolean connection1 = node1.addConnection(node2, distance, time);
         boolean connection2 = node2.addConnection(node1, distance, time);
         if (connection1 && connection2) return true;

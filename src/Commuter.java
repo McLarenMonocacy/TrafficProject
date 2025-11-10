@@ -1,7 +1,7 @@
 // Represents a person commuting through the transit system
 public class Commuter {
-    private String destination;
-    private float startTime;
+    private final String destination;
+    private final float startTime;
     private float endTime;
     private float travelDistance;
 

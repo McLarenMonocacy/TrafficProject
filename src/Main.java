@@ -3,6 +3,7 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
+        String saveFile = "nodemap.dat";
 
         TransitMap map = getTransitMap();
 
@@ -13,10 +14,11 @@ public class Main {
             System.out.println(node.getID() + ":" + node.getTravelTable());
         }
         String savaData = map.saveNodes();
+        CSVConversion.stringToFile(saveFile, savaData);
 
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-        TransitMap newMap = TransitMap.loadNodes(savaData);
+        TransitMap newMap = TransitMap.loadNodes(CSVConversion.fileToString(saveFile));
         Map<String, Map<String, List<String>>> newPathTables = newMap.genPathTables();
         for (TransitNode node : newMap.getNodes()){
             System.out.println(node.getID() + ":" + newPathTables.get(node.getID()));
@@ -24,7 +26,22 @@ public class Main {
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println(pathTables.equals(newPathTables));
+
+        TransitNode startNode = new TransitNode("0");
+        map.addNode(startNode);
+        map.addConnection(startNode, map.getNodes().getFirst(), 1f, 1f);
+        map.genPathTables();
+        Commuter commuter = new Commuter("6", 0f);
+        TransitVehicle bus = new TransitVehicle(5);
+        bus.addPassenger(commuter);
+        startNode.receiveCommuters(bus);
+
+
     }
+
+
+
+
 
     private static TransitMap getTransitMap() {
         TransitNode node1 = new TransitNode("1");

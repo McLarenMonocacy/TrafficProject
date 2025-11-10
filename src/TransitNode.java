@@ -25,10 +25,14 @@ public class TransitNode {
     public void receiveCommuters( TransitVehicle vehicle ){
         Commuter commuter = null;
          while ( (commuter = vehicle.removePassenger()) != null ){
+             if (commuter.getDestination().equals(id)){
+                 System.out.println("Arrived");
+                 continue;
+             }
              String nextStop = travelTable.get( commuter.getDestination() ).get(1); //The ID of the next stop along the path
             for ( TransitConnection connection : connectionList){ // Get the connection that leads to the next stop
                 if ( nextStop.equals( connection.getConnectedNode().id ) ){
-                    connection.addToQueue(commuter);
+                    connection.addToQueue(commuter); // Add the commuter to the queue leading to the next stop
                     break;
                 }
             }

@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class TransitConnection {
@@ -5,6 +6,7 @@ public class TransitConnection {
         this.connectedNode = connectedNode;
         this.distance = distance;
         this.time = time;
+        this.exitQueue = new LinkedList<>();
     }
 
     Queue<Commuter> exitQueue;
@@ -40,5 +42,7 @@ public class TransitConnection {
 
     public void addToQueue(Commuter commuter){
         exitQueue.offer(commuter);
+        //TODO: CHANGE: FOR NOW INSTANTLY DEPART THE COMMUTER
+        departVehicle();
     }
 }
