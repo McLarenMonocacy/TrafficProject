@@ -15,4 +15,8 @@ public class ExponentialDistribution extends RandomDistribution {
         // Uses the function method from page 54
         return -(1.0 / lambda) * Math.log(random.nextDouble());
     }
+
+    public double getLambda() {
+        return lambda;
+    }
 }
