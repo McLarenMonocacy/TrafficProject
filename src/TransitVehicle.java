@@ -2,8 +2,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TransitVehicle {
-    int maxCapacity;
-    Queue<Commuter> passengers = new LinkedList<>();
+    private int maxCapacity;
+    private Queue<Commuter> passengers = new LinkedList<>();
     public TransitVehicle (int maxCapacity){
         this.maxCapacity = maxCapacity;
     }
