@@ -32,8 +32,9 @@ public class TransitConnection {
         Commuter commuterToAdd = exitQueue.peek();
         while (commuterToAdd != null) {
             if (vehicle.addPassenger(commuterToAdd)){
-                exitQueue.poll();
-                commuterToAdd = exitQueue.peek();
+                commuterToAdd.addTravelDistance(distance);
+                exitQueue.poll(); //Commuter was added so remove it from the queue
+                commuterToAdd = exitQueue.peek(); //Get the next commuter to work on
             }
             else break;
         }

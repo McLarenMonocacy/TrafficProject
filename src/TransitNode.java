@@ -26,6 +26,7 @@ public class TransitNode {
         Commuter commuter = null;
          while ( (commuter = vehicle.removePassenger()) != null ){
              if (commuter.getDestination().equals(id)){
+                 //TODO: send the commuter to some kinds of finished list
                  System.out.println("Arrived");
                  continue;
              }

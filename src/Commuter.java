@@ -23,7 +23,7 @@ public class Commuter {
         this.travelDistance += distance;
     }
 
-    // Get destintion node ID
+    // Get destination node ID
     public String getDestination() {
         return destination;
     }

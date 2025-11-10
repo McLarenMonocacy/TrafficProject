@@ -37,6 +37,9 @@ public class Main {
         startNode.receiveCommuters(bus);
 
 
+        System.out.println("Traveled " + commuter.getTravelDistance() + "Miles");
+
+
     }
 
 
