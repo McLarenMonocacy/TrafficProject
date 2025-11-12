@@ -1,6 +1,6 @@
 TODO: 
-add tests for TransitNode
-add tests for Arrival Process
+NEW tests for Arrival Process
+Calculate expected time to traverse a node in the genTravelTables (i.e. wait time for the next vehicle)
 
 
 Could do:
