@@ -40,6 +40,17 @@ public class TransitNode {
                 }
             }
         }
+         int waitingVehicles = Integer.MAX_VALUE;
+         TransitConnection connectionToSendTO = null;
+         for (TransitConnection connection : connectionList){
+             if (waitingVehicles > connection.getNumbOfWaitingVehicles()){
+                 connectionToSendTO = connection;
+                 waitingVehicles = connection.getNumbOfWaitingVehicles();
+             }
+         }
+         if (connectionToSendTO != null){
+             connectionToSendTO.receiveVehicle(vehicle);
+         }
     }
 
     public String getID(){

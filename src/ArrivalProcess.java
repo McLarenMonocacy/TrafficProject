@@ -31,7 +31,7 @@ public class ArrivalProcess {
         roboTaxi.addPassenger(newCommuter);
         startNode.receiveCommuters(roboTaxi);
 
-        nextArrivalTime += distribution.sample();
+        nextArrivalTime += (float) distribution.sample();
     }
 
     // Get when next arrival will occur
