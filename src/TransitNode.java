@@ -23,11 +23,21 @@ public class TransitNode {
     }
 
     public void receiveCommuters( TransitVehicle vehicle ){
-        /* while vehicle is not empty
-        remove a commuter (Idk in what data structure the commuters in the vehicle will be stored )
-        check his transitConnection
-        place commuter in the appropriate transitConnect queue
-         */
+        Commuter commuter = null;
+         while ( (commuter = vehicle.removePassenger()) != null ){
+             if (commuter.getDestination().equals(id)){
+                 //TODO: send the commuter to some kinds of finished list
+                 System.out.println("Arrived");
+                 continue;
+             }
+             String nextStop = travelTable.get( commuter.getDestination() ).get(1); //The ID of the next stop along the path
+            for ( TransitConnection connection : connectionList){ // Get the connection that leads to the next stop
+                if ( nextStop.equals( connection.getConnectedNode().id ) ){
+                    connection.addToQueue(commuter); // Add the commuter to the queue leading to the next stop
+                    break;
+                }
+            }
+        }
     }
 
     public String getID(){
@@ -36,7 +46,9 @@ public class TransitNode {
     public List< TransitConnection > getConnections(){
         return connectionList;
     }
-
+    public Map<String, List<String>> getTravelTable(){
+        return travelTable;
+    }
     public void setTravelTable(Map<String, List<String>> travelTable){
         this.travelTable = travelTable;
     }

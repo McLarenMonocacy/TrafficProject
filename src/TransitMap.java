@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 public class TransitMap {
-    //TODO: add tests
 
     private final List<TransitNode> nodes;
 
@@ -13,7 +12,7 @@ public class TransitMap {
     }
 
     public boolean addNode (TransitNode node){
-
+        // Check that a node of the same ID isn't already in the map
         for (TransitNode n : nodes){
             if (n.getID().equals(node.getID())){
                 return false;
@@ -24,6 +23,18 @@ public class TransitMap {
     }
 
     public boolean addConnection(TransitNode node1, TransitNode node2, float distance, float time){
+        boolean node1Exists = false;
+        boolean node2Exists = false;
+
+        for (TransitNode node : nodes){
+            // Check that both nodes are in the map first
+            if (!node1Exists && node.getID().equals(node1.getID())) node1Exists = true;
+            if (!node2Exists && node.getID().equals(node2.getID())) node2Exists = true;
+
+            if (node1Exists && node2Exists) break;
+        }
+        if (!node2Exists || !node1Exists) return false;
+
         boolean connection1 = node1.addConnection(node2, distance, time);
         boolean connection2 = node2.addConnection(node1, distance, time);
         if (connection1 && connection2) return true;
@@ -63,15 +74,15 @@ public class TransitMap {
     }
 
     public Map<String,Map<String,List<String>>> genPathTables(){
-        //TODO: store each table in their respective TransitNode
         Map<String, Map<String, List<String>>> pathTables = new HashMap<>(); //Table holding tables
         for (TransitNode startNode : nodes){
-            Map<String, List<String>> traveTable = new HashMap<>(); //Table holding travel Destinations
+            Map<String, List<String>> travelTable = new HashMap<>(); //Table holding travel Destinations
             for (TransitNode destNode : nodes){
                 if (startNode.getID().equals(destNode.getID())) continue;
-                traveTable.put(destNode.getID(),calcShortestPath(startNode, destNode.getID()));
+                travelTable.put(destNode.getID(),calcShortestPath(startNode, destNode.getID()));
             }
-            pathTables.put(startNode.getID(), traveTable);
+            startNode.setTravelTable(travelTable); // store the travel table in the node
+            pathTables.put(startNode.getID(), travelTable);
         }
         return pathTables;
     }
