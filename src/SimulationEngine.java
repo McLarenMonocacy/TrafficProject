@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SimulationEngine {
-    public static SimulationEngine refToSelf;
+    public static SimulationEngine refToSelf; //TODO: REMOVE
     private float currentTime;
     private final float runTime;
     private final TransitMap transitMap;
