@@ -3,6 +3,19 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
+
+        TransitMap map = getTransitMap();
+        SimulationEngine sim = new SimulationEngine(map.saveNodes(), 9999);
+        String outputData = sim.run();
+        CSVConversion.stringToFile("OUTPUTDATA.TXT", outputData);
+        System.out.println(SimulationEngine.refToSelf.finishedCommuters.size());
+
+    }
+
+
+
+    private static void oldMain(){
+
         String saveFile = "nodemap.dat";
 
         TransitMap map = getTransitMap();
@@ -39,12 +52,7 @@ public class Main {
 
         System.out.println("Traveled " + commuter.getTravelDistance() + "Miles");
 
-
     }
-
-
-
-
 
     private static TransitMap getTransitMap() {
         TransitNode node1 = new TransitNode("1");

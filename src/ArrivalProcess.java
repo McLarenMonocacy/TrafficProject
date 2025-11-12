@@ -49,8 +49,8 @@ public class ArrivalProcess {
         nodes = transitMap.getNodes();
     }
 
-    private int randIndex(){
-        return (int) Math.round(Math.floor((Math.random()*nodes.size())/(nodes.size())));
+    public int randIndex(){
+        return (int) Math.round(Math.floor(Math.random()*nodes.size()));
     }
 
 }

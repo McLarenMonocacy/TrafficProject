@@ -25,9 +25,11 @@ public class TransitNode {
     public void receiveCommuters( TransitVehicle vehicle ){
         Commuter commuter = null;
          while ( (commuter = vehicle.removePassenger()) != null ){
-             if (commuter.getDestination().equals(id)){
+             if (commuter.getDestination().equals(id)){ //This is the commuters destination
                  //TODO: send the commuter to some kinds of finished list
-                 System.out.println("Arrived");
+                 //TODO: in a more elegant way
+                 SimulationEngine.refToSelf.finishedCommuters.add(commuter);
+                 commuter.setEndTime(SimulationEngine.refToSelf.getCurrentTime());
                  continue;
              }
              String nextStop = travelTable.get( commuter.getDestination() ).get(1); //The ID of the next stop along the path
