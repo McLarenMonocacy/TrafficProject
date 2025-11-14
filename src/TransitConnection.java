@@ -10,10 +10,10 @@ public class TransitConnection {
         this.distance = distance;
         this.time = time;
         this.exitQueue = new LinkedList<>();
-        waitingVehicles = new LinkedList<>();
+        this.waitingVehicles = new LinkedList<>();
     }
 
-    Queue<Commuter> exitQueue;
+    private Queue<Commuter> exitQueue;
     private final TransitNode connectedNode;
     private final float distance;
     private final float time;

@@ -4,12 +4,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TransitConnectionTest {
 
-    private TransitNode node1;
-    private TransitNode node2;
+    private  Commuter commuter1, commuter2;
+    private  TransitVehicle vehicle1, vehicle2;
+    private TransitNode node1, node2;
     private TransitConnection connection;
 
     @BeforeEach
     void setUp() {
+        commuter1 = new Commuter("HappyTown", 1);
+        commuter2 = new Commuter("SadTown", 2);
+        vehicle1 = new TransitVehicle(4);
+        vehicle2 = new TransitVehicle(4);
         node1 = new TransitNode("Station_A");
         node2 = new TransitNode("Station_B");
         connection = new TransitConnection(node2, 10.5f, 25.0f);
@@ -98,4 +103,14 @@ class TransitConnectionTest {
         assertEquals(10.5f, connection.getDistance(), 0.001f, "Distance should not change");
         assertEquals(25.0f, connection.getTravelTime(), 0.001f, "Travel time should not change");
     }
+
+    @Test
+    void testReceiveVehiclesAndGetNumberOfWaitingVehicles() {
+        connection.receiveVehicle(vehicle1);
+        connection.receiveVehicle(vehicle2);
+        assertEquals(1, connection.getNumbOfWaitingVehicles(), "One element should be present");
+    }
+
+
+
 }
