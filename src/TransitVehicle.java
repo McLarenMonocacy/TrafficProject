@@ -10,6 +10,12 @@ public class TransitVehicle {
         passengers = new LinkedList<>();
         prevStop = startingStop;
     }
+    public TransitVehicle (int maxCapacity){
+        this(maxCapacity, "");
+    }
+    public TransitVehicle (){
+        this(1);
+    }
 
     public boolean addPassenger(Commuter commuter){
         if (passengers.size() < maxCapacity){
