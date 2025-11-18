@@ -51,7 +51,11 @@ public class SimulationEngine {
         StringBuilder outputData = new StringBuilder();
         for (Commuter commuter : finishedCommuters){
             float commuterTime = commuter.getEndTime() - commuter.getStartTime();
-            outputData.append(commuterTime).append(" : ").append(commuter.getDestination()).append("\n");
+            outputData.append(String.format("%.2f",commuterTime)).append(",");
+            for (String path : commuter.getPath()){
+                outputData.append(path).append(",");
+            }
+            outputData.append("\n");
         }
 
 

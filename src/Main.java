@@ -55,12 +55,14 @@ public class Main {
     }
 
     private static TransitMap getTransitMap() {
-        TransitNode node1 = new TransitNode("Fairlane");
-        TransitNode node2 = new TransitNode("Mark's Burg");
-        TransitNode node3 = new TransitNode("Clown town");
-        TransitNode node4 = new TransitNode("Jolly Rodger bay");
-        TransitNode node5 = new TransitNode("Big apple");
-        TransitNode node6 = new TransitNode("Small apple");
+        //String[] places = new String[]{"Fairlane","Mark's Burg", "Clown town", "Jolly Rodger bay", "Big apple", "Small apple"};
+        String[] places = new String[]{"a","b", "c", "d", "e", "f"};
+        TransitNode node1 = new TransitNode(places[0]);
+        TransitNode node2 = new TransitNode(places[1]);
+        TransitNode node3 = new TransitNode(places[2]);
+        TransitNode node4 = new TransitNode(places[3]);
+        TransitNode node5 = new TransitNode(places[4]);
+        TransitNode node6 = new TransitNode(places[5]);
 
         TransitMap map = new TransitMap();
 
