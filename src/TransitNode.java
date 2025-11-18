@@ -41,16 +41,15 @@ public class TransitNode {
                 }
             }
         }
-         int waitingVehicles = Integer.MAX_VALUE;
-         TransitConnection connectionToSendTO = null;
-         for (TransitConnection connection : connectionList){
-             if (waitingVehicles > connection.getNumbOfWaitingVehicles()){
-                 connectionToSendTO = connection;
-                 waitingVehicles = connection.getNumbOfWaitingVehicles();
+
+         if (!vehicle.getPrevStop().isEmpty()){ //This should reject all vehicles that didn't come from a node (aka the arrival process)
+             for (TransitConnection connection : connectionList){
+                 if (vehicle.getPrevStop().equals(connection.getConnectedNode().getID())){
+                     vehicle.setPrevStop(id);
+                     connection.receiveVehicle(vehicle);
+                     return;
+                 }
              }
-         }
-         if (connectionToSendTO != null){
-             connectionToSendTO.receiveVehicle(vehicle);
          }
     }
 

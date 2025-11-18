@@ -23,7 +23,7 @@ public class SimulationEngine {
     public String run(){
         for (TransitNode node : transitMap.getNodes()){
             for (TransitConnection connection : node.getConnections()){
-                connection.receiveVehicle(new TransitVehicle(5));
+                connection.receiveVehicle(new TransitVehicle(500, node.getID()));
             }
         }
 

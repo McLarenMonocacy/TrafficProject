@@ -17,7 +17,8 @@ public class TransitConnection {
     private final TransitNode connectedNode;
     private final float distance;
     private final float time;
-    private Queue<TransitVehicle> waitingVehicles;
+
+    private final Queue<TransitVehicle> waitingVehicles;
     private TransitVehicle vehicleReadyToPickup;
     private float currentVehicleWaitTime;
 
@@ -75,7 +76,8 @@ public class TransitConnection {
             return 0;
         }
         else {
-            return waitingVehicles.size();
+            //Add one to account for the vehicle that is ready to pickup commuters already
+            return waitingVehicles.size() + 1;
         }
     }
 
