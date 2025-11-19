@@ -6,22 +6,22 @@ public class SimulationEngine {
     private static float runTime;
     private static TransitMap transitMap;
     private static ArrivalProcess arrivals;
-    public static final List<Commuter> finishedCommuters = new LinkedList<>();
-
-    private SimulationEngine() {
-        throw new AssertionError("Cannot instantiate static class");
-    }
+    //TODO: maybe set to private with access functions
+    public static List<Commuter> finishedCommuters;
+    private static boolean wasInitRun = false;
 
     public static void init(String nodeData, float runTime) {
         currentTime = 0;
         SimulationEngine.runTime = runTime;
-        finishedCommuters.clear();
+        finishedCommuters = new LinkedList<>();
         transitMap = TransitMap.loadNodes(nodeData);
         transitMap.genPathTables();
         arrivals = new ArrivalProcess(1, transitMap);
+        wasInitRun = true;
     }
 
     static String run() {
+        if (!wasInitRun) throw new RuntimeException("Init was never ran");
         for (TransitNode node : transitMap.getNodes()) {
             for (TransitConnection connection : node.getConnections()) {
                 connection.receiveVehicle(new TransitVehicle(5));

@@ -66,7 +66,7 @@ public class TransitConnection {
         //Loads a vehicle to pickup commuters if there isn't already a vehicle doing that
         if (vehicleReadyToPickup == null && !waitingVehicles.isEmpty()){
             vehicleReadyToPickup = waitingVehicles.poll();
-            currentVehicleWaitTime = SimulationEngine.refToSelf.getCurrentTime();
+            currentVehicleWaitTime = SimulationEngine.getCurrentTime();
         }
     }
 
