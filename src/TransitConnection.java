@@ -1,9 +1,8 @@
-import java.nio.channels.FileLock;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class TransitConnection {
-    public static final float WAIT_TIME = 5;
+    private static final float WAIT_TIME = .5f;
 
     public TransitConnection( TransitNode connectedNode, float distance, float time ){
         this.connectedNode = connectedNode;
@@ -11,6 +10,7 @@ public class TransitConnection {
         this.time = time;
         this.exitQueue = new LinkedList<>();
         this.waitingVehicles = new LinkedList<>();
+        this.vehiclesInTransit = new LinkedList<>();
     }
 
     private Queue<Commuter> exitQueue;
@@ -20,7 +20,8 @@ public class TransitConnection {
 
     private final Queue<TransitVehicle> waitingVehicles;
     private TransitVehicle vehicleReadyToPickup;
-    private float currentVehicleWaitTime;
+    private float currentVehicleDepartTime;
+    private final Queue<TransitVehicle> vehiclesInTransit;
 
 
     public float getDistance() {
@@ -35,23 +36,33 @@ public class TransitConnection {
         return connectedNode;
     }
 
-    public void departVehicle(){
+    public void loadCommuterOntoVehicle(){
         if (vehicleReadyToPickup == null){
             return; //There is no vehicle
         }
-        currentVehicleWaitTime = Float.MAX_VALUE;
         Commuter commuterToAdd = exitQueue.peek();
         while (commuterToAdd != null) {
             if (vehicleReadyToPickup.addPassenger(commuterToAdd)){
                 commuterToAdd.addTravelDistance(distance);
                 exitQueue.poll(); //Commuter was added so remove it from the queue
+                currentVehicleDepartTime += WAIT_TIME;
                 commuterToAdd = exitQueue.peek(); //Get the next commuter to work on
             }
             else break;
         }
-        connectedNode.receiveCommuters(vehicleReadyToPickup);
+
+    }
+    public void departVehicle(){
+        if (vehicleReadyToPickup == null){
+            return; //There is no vehicle
+        }
+        currentVehicleDepartTime = Float.MAX_VALUE;
+        vehiclesInTransit.add(vehicleReadyToPickup);
         vehicleReadyToPickup = null;
         checkIfVehicleCanPickUp();
+    }
+    public void vehicleReachedDestination(){
+        connectedNode.receiveCommuters(vehiclesInTransit.poll());
     }
 
     public void addToQueue(Commuter commuter){
@@ -67,7 +78,9 @@ public class TransitConnection {
         //Loads a vehicle to pickup commuters if there isn't already a vehicle doing that
         if (vehicleReadyToPickup == null && !waitingVehicles.isEmpty()){
             vehicleReadyToPickup = waitingVehicles.poll();
-            currentVehicleWaitTime = SimulationEngine.getCurrentTime();
+            if (vehicleReadyToPickup != null){
+                currentVehicleDepartTime = SimulationEngine.getCurrentTime();
+            }
         }
     }
 
@@ -81,7 +94,11 @@ public class TransitConnection {
         }
     }
 
-    public float getCurrentVehicleWaitTime() {
-        return currentVehicleWaitTime;
+    public float getCurrentVehicleDepartTime() {
+        return currentVehicleDepartTime;
+    }
+
+    public Queue<TransitVehicle> getVehiclesInTransit() {
+        return vehiclesInTransit;
     }
 }

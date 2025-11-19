@@ -46,7 +46,9 @@ public final class SimulationEngine {
                 arrivals.generateNextCommuter();
             } else {
                 switch (nextNodeEvent.eventType) {
-                    case 0:
+                    case 0: //Vehicle tries to depart
+                        //Check if any more commuters can be picked up
+                        //if not do this \/
                         nextNodeEvent.affectedConnection.departVehicle();
                         currentTime = nextNodeEvent.eventTime;
                         break;
@@ -75,12 +77,18 @@ public final class SimulationEngine {
         NodeEvent output = null;
         for (TransitNode node : transitMap.getNodes()) {
             for (TransitConnection connection : node.getConnections()) {
+                //Checks if vehicle can depart
                 if (connection.getNumbOfWaitingVehicles() > 0) {
-                    float eventTime = connection.getCurrentVehicleWaitTime() + TransitConnection.WAIT_TIME;
-                    if (output == null) {
+                    float eventTime = connection.getCurrentVehicleDepartTime();
+                    if (output == null || eventTime < output.eventTime) {
                         output = new NodeEvent(eventTime, 0, connection);
-                    } else if (eventTime < output.eventTime) {
-                        output = new NodeEvent(eventTime, 0, connection);
+                    }
+                }
+                //Checks if vehicle reached destination
+                TransitVehicle vehicleInTransit = connection.getVehiclesInTransit().peek();
+                if (vehicleInTransit != null){
+                    if (output == null || vehicleInTransit.getArrivalTimeToNextNode() < output.eventTime) {
+                        output = new NodeEvent(vehicleInTransit.getArrivalTimeToNextNode(), 1, connection);
                     }
                 }
             }

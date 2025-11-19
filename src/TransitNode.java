@@ -42,6 +42,7 @@ public class TransitNode {
             }
         }
 
+         //Send the vehicle to the proper TransitConnection
          if (!vehicle.getPrevStop().isEmpty()){ //This should reject all vehicles that didn't come from a node (aka the arrival process)
              for (TransitConnection connection : connectionList){
                  if (vehicle.getPrevStop().equals(connection.getConnectedNode().getID())){
