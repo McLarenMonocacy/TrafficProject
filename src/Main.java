@@ -12,48 +12,6 @@ public class Main {
 
     }
 
-
-
-    private static void oldMain(){
-
-        String saveFile = "nodemap.dat";
-
-        TransitMap map = getTransitMap();
-
-
-        Map<String, Map<String, List<String>>> pathTables = map.genPathTables();
-        for (TransitNode node : map.getNodes()){
-            System.out.println(node.getID() + ":" + pathTables.get(node.getID()));
-            System.out.println(node.getID() + ":" + node.getTravelTable());
-        }
-        String savaData = map.saveNodes();
-        CSVConversion.stringToFile(saveFile, savaData);
-
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
-        TransitMap newMap = TransitMap.loadNodes(CSVConversion.fileToString(saveFile));
-        Map<String, Map<String, List<String>>> newPathTables = newMap.genPathTables();
-        for (TransitNode node : newMap.getNodes()){
-            System.out.println(node.getID() + ":" + newPathTables.get(node.getID()));
-            System.out.println(node.getID() + ":" + node.getTravelTable());
-        }
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println(pathTables.equals(newPathTables));
-
-        TransitNode startNode = new TransitNode("0");
-        map.addNode(startNode);
-        map.addConnection(startNode, map.getNodes().getFirst(), 1f, 1f);
-        map.genPathTables();
-        Commuter commuter = new Commuter("6", 0f);
-        TransitVehicle bus = new TransitVehicle(5);
-        bus.addPassenger(commuter);
-        startNode.receiveCommuters(bus);
-
-
-        System.out.println("Traveled " + commuter.getTravelDistance() + "Miles");
-
-    }
-
     private static TransitMap getTransitMap() {
         //String[] places = new String[]{"Fairlane","Mark's Burg", "Clown town", "Jolly Rodger bay", "Big apple", "Small apple"};
         String[] places = new String[]{"a","b", "c", "d", "e", "f"};

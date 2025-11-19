@@ -28,7 +28,7 @@ public final class SimulationEngine {
         if (!wasInitRun) throw new RuntimeException("Init was never ran");
         for (TransitNode node : transitMap.getNodes()) {
             for (TransitConnection connection : node.getConnections()) {
-                connection.receiveVehicle(new TransitVehicle(5));
+                connection.receiveVehicle(new TransitVehicle(500, node.getID()));
             }
         }
 

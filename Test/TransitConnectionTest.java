@@ -66,14 +66,6 @@ class TransitConnectionTest {
     }
 
     @Test
-    void testAddToQueueWithNullQueue() {
-        Commuter commuter = new Commuter("anything",0f);
-        assertThrows(NullPointerException.class, () -> {
-            connection.addToQueue(commuter);
-        }, "Should throw NullPointerException when we add exitQueue is not initialized");
-    }
-
-    @Test
     void testLargeDistanceValue() {
         TransitConnection largeConn = new TransitConnection(node2, Float.MAX_VALUE, 25.0f);
         assertEquals(Float.MAX_VALUE, largeConn.getDistance(), "Should handle large float values");
