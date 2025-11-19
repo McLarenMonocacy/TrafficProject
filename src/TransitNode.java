@@ -25,12 +25,9 @@ public class TransitNode {
     public void receiveCommuters( TransitVehicle vehicle ){
         Commuter commuter = null;
          while ( (commuter = vehicle.removePassenger()) != null ){
-             commuter.advancePath(id);
-             if (commuter.getDestination().equals(id)){ //This is the commuters destination
+             if (commuter.getDestination().equals(id)){
                  //TODO: send the commuter to some kinds of finished list
-                 //TODO: in a more elegant way
-                 SimulationEngine.refToSelf.finishedCommuters.add(commuter);
-                 commuter.setEndTime(SimulationEngine.refToSelf.getCurrentTime());
+                 System.out.println("Arrived");
                  continue;
              }
              String nextStop = travelTable.get( commuter.getDestination() ).get(1); //The ID of the next stop along the path
@@ -41,17 +38,6 @@ public class TransitNode {
                 }
             }
         }
-         int waitingVehicles = Integer.MAX_VALUE;
-         TransitConnection connectionToSendTO = null;
-         for (TransitConnection connection : connectionList){
-             if (waitingVehicles > connection.getNumbOfWaitingVehicles()){
-                 connectionToSendTO = connection;
-                 waitingVehicles = connection.getNumbOfWaitingVehicles();
-             }
-         }
-         if (connectionToSendTO != null){
-             connectionToSendTO.receiveVehicle(vehicle);
-         }
     }
 
     public String getID(){
