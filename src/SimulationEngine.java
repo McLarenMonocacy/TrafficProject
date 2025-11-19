@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimulationEngine {
+public final class SimulationEngine {
     private static float currentTime;
     private static float runTime;
     private static TransitMap transitMap;
@@ -9,6 +9,10 @@ public class SimulationEngine {
     //TODO: maybe set to private with access functions
     public static List<Commuter> finishedCommuters;
     private static boolean wasInitRun = false;
+
+    private SimulationEngine(){
+        throw new RuntimeException("Everything is static so instancing makes no sense");
+    }
 
     public static void init(String nodeData, float runTime) {
         currentTime = 0;
