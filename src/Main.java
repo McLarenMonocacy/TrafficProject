@@ -3,19 +3,6 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-
-        TransitMap map = getTransitMap();
-        SimulationEngine sim = new SimulationEngine(map.saveNodes(), 999999);
-        String outputData = sim.run();
-        CSVConversion.stringToFile("OUTPUTDATA.TXT", outputData);
-        System.out.println(SimulationEngine.refToSelf.finishedCommuters.size());
-
-    }
-
-
-
-    private static void oldMain(){
-
         String saveFile = "nodemap.dat";
 
         TransitMap map = getTransitMap();
@@ -52,17 +39,20 @@ public class Main {
 
         System.out.println("Traveled " + commuter.getTravelDistance() + "Miles");
 
+
     }
 
+
+
+
+
     private static TransitMap getTransitMap() {
-        //String[] places = new String[]{"Fairlane","Mark's Burg", "Clown town", "Jolly Rodger bay", "Big apple", "Small apple"};
-        String[] places = new String[]{"a","b", "c", "d", "e", "f"};
-        TransitNode node1 = new TransitNode(places[0]);
-        TransitNode node2 = new TransitNode(places[1]);
-        TransitNode node3 = new TransitNode(places[2]);
-        TransitNode node4 = new TransitNode(places[3]);
-        TransitNode node5 = new TransitNode(places[4]);
-        TransitNode node6 = new TransitNode(places[5]);
+        TransitNode node1 = new TransitNode("1");
+        TransitNode node2 = new TransitNode("2");
+        TransitNode node3 = new TransitNode("3");
+        TransitNode node4 = new TransitNode("4");
+        TransitNode node5 = new TransitNode("5");
+        TransitNode node6 = new TransitNode("6");
 
         TransitMap map = new TransitMap();
 
