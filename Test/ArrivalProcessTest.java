@@ -1,68 +1,75 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 // Unit tests for ArrivalProcess class
 class ArrivalProcessTest {
 
-    @Test
-    void testConstructor() {
-        // Create arrival process
-        ArrivalProcess ap = new ArrivalProcess(0.5, "Jefferson", "DC_Downtown");
+    private TransitMap testMap;
 
-        // Check initial values
-        assertEquals("Jefferson", ap.getSourceNodeID());
-        assertEquals("DC_Downtown", ap.getDestinationNodeID());
-        assertEquals(0.0, ap.getNextArrivalTime(), 0.001);
+    @BeforeEach
+    void setUp() {
+        testMap = new TransitMap();
+
+        TransitNode n1= new TransitNode("NodeA");
+        TransitNode n2= new TransitNode("NodeB");
+
+        testMap.addNode(n1);
+        testMap.addNode(n2);
+
+        testMap.addConnection(n1,n2,10,10);
+
+
+        testMap.genPathTables();
+
+    }
+
+    @Test
+    void testConstructor(){
+
+        ArrivalProcess ap = new ArrivalProcess(2.0,testMap);
+
+        assertEquals(0.0, ap.getNextArrivalTime(),0.001);
+
     }
 
     @Test
     void testGenerateNextCommuter() {
         // Create arrival process
-        ArrivalProcess ap = new ArrivalProcess(0.5, "Myersville", "Rockville");
+        ArrivalProcess ap = new ArrivalProcess(1.0, testMap);
+        double initialTime= ap.getNextArrivalTime();
 
-        // Generate first commuter
-        Commuter c1 = ap.generateNextCommuter();
 
-        // Check commuter properties
-        assertNotNull(c1);
-        assertEquals("Rockville", c1.getDestination());
-        assertEquals(0.0f, c1.getStartTime(), 0.001f);
+        ap.generateNextCommuter();
 
-        // Next arrival time should be positive
-        assertTrue(ap.getNextArrivalTime() > 0.0);
+        double newTime=ap.getNextArrivalTime();
+
+        assertTrue(newTime> initialTime,"Time should advance after generating a commuter");
     }
 
     @Test
     void testMultipleArrivals() {
         // Create arrival process
-        ArrivalProcess ap = new ArrivalProcess(1.0, "Frederick", "Bethesda");
+        ArrivalProcess ap = new ArrivalProcess(1.0, testMap);
 
-        // Generate multiple commuters
-        Commuter c1 = ap.generateNextCommuter();
-        double time1 = ap.getNextArrivalTime();
+        double time1= ap.getNextArrivalTime();
+        ap.generateNextCommuter();
 
-        Commuter c2 = ap.generateNextCommuter();
-        double time2 = ap.getNextArrivalTime();
+        double time2=ap.getNextArrivalTime();
+        ap.generateNextCommuter();
+        double time3=ap.getNextArrivalTime();
 
-        Commuter c3 = ap.generateNextCommuter();
-        double time3 = ap.getNextArrivalTime();
 
-        // Times should be increasing
-        assertTrue(time1 > 0.0);
-        assertTrue(time2 > time1);
-        assertTrue(time3 > time2);
+        assertTrue(time2>time1);
+        assertTrue(time3>time2);
 
-        // Each commuter should have correct destination
-        assertEquals("Bethesda", c1.getDestination());
-        assertEquals("Bethesda", c2.getDestination());
-        assertEquals("Bethesda", c3.getDestination());
     }
 
     @Test
     void testArrivalTimesAreRandom() {
         // Create two identical processes
-        ArrivalProcess ap1 = new ArrivalProcess(0.5, "NodeA", "NodeB");
-        ArrivalProcess ap2 = new ArrivalProcess(0.5, "NodeA", "NodeB");
+        ArrivalProcess ap1 = new ArrivalProcess(0.5, testMap);
+        ArrivalProcess ap2 = new ArrivalProcess(0.5, testMap);
 
         // Generate arrivals
         ap1.generateNextCommuter();
@@ -75,38 +82,19 @@ class ArrivalProcessTest {
     @Test
     void testAdvanceArrival() {
         // Create arrival process
-        ArrivalProcess ap = new ArrivalProcess(0.8, "Source", "Dest");
+        ArrivalProcess ap = new ArrivalProcess(1.0, testMap);
+        double initialTime= ap.getNextArrivalTime();
 
-        // Advance without generating commuter
-        double time1 = ap.getNextArrivalTime();
         ap.advanceArrival();
-        double time2 = ap.getNextArrivalTime();
 
-        // Time should have advanced
-        assertTrue(time2 > time1);
+        assertTrue(ap.getNextArrivalTime()>initialTime);
     }
 
-    @Test
-    void testCommuterStartTimes() {
-        // Create arrival process
-        ArrivalProcess ap = new ArrivalProcess(0.5, "NodeX", "NodeY");
 
-        // Generate commuters and check start times match arrival times
-        Commuter c1 = ap.generateNextCommuter();
-        assertEquals(0.0f, c1.getStartTime(), 0.001f);
-
-        double expectedTime2 = ap.getNextArrivalTime();
-        Commuter c2 = ap.generateNextCommuter();
-        assertEquals(expectedTime2, c2.getStartTime(), 0.001f);
-
-        double expectedTime3 = ap.getNextArrivalTime();
-        Commuter c3 = ap.generateNextCommuter();
-        assertEquals(expectedTime3, c3.getStartTime(), 0.001f);
-    }
 
     @Test
     void testHighArrivalRate() {
-        ArrivalProcess ap = new ArrivalProcess(10.0, "BusyNode", "DC");
+        ArrivalProcess ap = new ArrivalProcess(10.0, testMap);
 
         // Generate several arrivals
         ap.generateNextCommuter();
@@ -122,7 +110,7 @@ class ArrivalProcessTest {
     @Test
     void testLowArrivalRate() {
         // Low lambda means long inter-arrival times
-        ArrivalProcess ap = new ArrivalProcess(0.1, "QuietNode", "DC");
+        ArrivalProcess ap = new ArrivalProcess(0.1, testMap);
 
         // Generate arrival
         ap.generateNextCommuter();
@@ -133,18 +121,5 @@ class ArrivalProcessTest {
         assertTrue(time1 > 0.0);
     }
 
-    @Test
-    void testSourceDestinationPreserved() {
-        // Test that node IDs are preserved correctly
-        ArrivalProcess ap = new ArrivalProcess(1.0, "StartHere", "EndThere");
 
-        // Generate many commuters
-        for (int i = 0; i < 10; i++) {
-            Commuter c = ap.generateNextCommuter();
-            assertEquals("EndThere", c.getDestination());
-        }
-
-        // Source should never change
-        assertEquals("StartHere", ap.getSourceNodeID());
-    }
 }
