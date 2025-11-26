@@ -54,9 +54,11 @@ public class TransitConnection {
     }
     public void departVehicle(){
         if (vehicleReadyToPickup == null){
+            System.out.println("WE SHOULDN'T BE HERE");
             return; //There is no vehicle
         }
         currentVehicleDepartTime = Float.MAX_VALUE;
+        vehicleReadyToPickup.setArrivalTimeToNextNode(time);
         vehiclesInTransit.add(vehicleReadyToPickup);
         vehicleReadyToPickup = null;
         checkIfVehicleCanPickUp();

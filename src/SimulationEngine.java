@@ -25,7 +25,7 @@ public final class SimulationEngine {
         finishedCommuters = new LinkedList<>();
         transitMap = TransitMap.loadNodes(nodeData);
         transitMap.genPathTables();
-        arrivals = new ArrivalProcess(1, transitMap);
+        arrivals = new ArrivalProcess(10, transitMap);
         wasInitRun = true;
     }
 

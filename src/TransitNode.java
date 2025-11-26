@@ -24,6 +24,7 @@ public class TransitNode {
 
     public void receiveCommuters( TransitVehicle vehicle ){
         Commuter commuter = null;
+        //Unloads all the commuters
          while ( (commuter = vehicle.removePassenger()) != null ){
              commuter.advancePath(id);
              if (commuter.getDestination().equals(id)){ //This is the commuters destination
