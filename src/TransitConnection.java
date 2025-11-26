@@ -1,10 +1,7 @@
-import java.nio.channels.FileLock;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class TransitConnection {
-    public static final float WAIT_TIME = 5;
-
     public TransitConnection( TransitNode connectedNode, float distance, float time ){
         this.connectedNode = connectedNode;
         this.distance = distance;
@@ -36,22 +33,17 @@ public class TransitConnection {
     }
 
     public void departVehicle(){
-        if (vehicleReadyToPickup == null){
-            return; //There is no vehicle
-        }
-        currentVehicleWaitTime = Float.MAX_VALUE;
+        TransitVehicle vehicle = new TransitVehicle(5);
         Commuter commuterToAdd = exitQueue.peek();
         while (commuterToAdd != null) {
-            if (vehicleReadyToPickup.addPassenger(commuterToAdd)){
+            if (vehicle.addPassenger(commuterToAdd)){
                 commuterToAdd.addTravelDistance(distance);
                 exitQueue.poll(); //Commuter was added so remove it from the queue
                 commuterToAdd = exitQueue.peek(); //Get the next commuter to work on
             }
             else break;
         }
-        connectedNode.receiveCommuters(vehicleReadyToPickup);
-        vehicleReadyToPickup = null;
-        checkIfVehicleCanPickUp();
+        connectedNode.receiveCommuters(vehicle);
     }
 
     public void addToQueue(Commuter commuter){

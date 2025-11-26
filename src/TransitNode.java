@@ -25,8 +25,7 @@ public class TransitNode {
     public void receiveCommuters( TransitVehicle vehicle ){
         Commuter commuter = null;
          while ( (commuter = vehicle.removePassenger()) != null ){
-             commuter.advancePath(id);
-             if (commuter.getDestination().equals(id)){ //This is the commuters destination
+             if (commuter.getDestination().equals(id)){
                  //TODO: send the commuter to some kinds of finished list
                  //TODO: in a more elegant way
                  SimulationEngine.finishedCommuters.add(commuter);
