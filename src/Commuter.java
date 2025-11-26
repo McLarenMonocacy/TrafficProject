@@ -1,9 +1,13 @@
+import java.util.LinkedList;
+import java.util.List;
+
 // Represents a person commuting through the transit system
 public class Commuter {
     private final String destination;
     private final float startTime;
     private float endTime;
     private float travelDistance;
+    private List<String> path;
 
     // Create new commuter with destination and start time
     public Commuter(String destination, float startTime) {
@@ -11,6 +15,7 @@ public class Commuter {
         this.startTime = startTime;
         this.endTime = -1.0f; // Not yet finished
         this.travelDistance = 0.0f;
+        this.path = new LinkedList<>();
     }
 
     // Record when commuter finishes
@@ -47,5 +52,14 @@ public class Commuter {
     public float getPassageTime() {
         if (endTime < 0) return -1.0f; // Not finished yet
         return endTime - startTime;
+    }
+
+
+    public void advancePath(String node){
+        path.add(node);
+    }
+
+    public List<String> getPath(){
+        return path;
     }
 }

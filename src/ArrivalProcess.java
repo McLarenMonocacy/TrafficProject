@@ -27,7 +27,7 @@ public class ArrivalProcess {
         }
 
         Commuter newCommuter = new Commuter(endNode.getID(), nextArrivalTime);
-        TransitVehicle roboTaxi = new TransitVehicle(1);
+        TransitVehicle roboTaxi = new TransitVehicle(1,"");
         roboTaxi.addPassenger(newCommuter);
         startNode.receiveCommuters(roboTaxi);
 
@@ -50,7 +50,7 @@ public class ArrivalProcess {
     }
 
     private int randIndex(){
-        return (int) Math.round(Math.floor((Math.random()*nodes.size())/(nodes.size())));
+        return (int) Math.round(Math.floor((Math.random()*nodes.size())));
     }
 
 }

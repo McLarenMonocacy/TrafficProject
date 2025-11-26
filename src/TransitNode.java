@@ -27,7 +27,9 @@ public class TransitNode {
          while ( (commuter = vehicle.removePassenger()) != null ){
              if (commuter.getDestination().equals(id)){
                  //TODO: send the commuter to some kinds of finished list
-                 System.out.println("Arrived");
+                 //TODO: in a more elegant way
+                 SimulationEngine.finishedCommuters.add(commuter);
+                 commuter.setEndTime(SimulationEngine.getCurrentTime());
                  continue;
              }
              String nextStop = travelTable.get( commuter.getDestination() ).get(1); //The ID of the next stop along the path
@@ -38,6 +40,16 @@ public class TransitNode {
                 }
             }
         }
+
+         if (!vehicle.getPrevStop().isEmpty()){ //This should reject all vehicles that didn't come from a node (aka the arrival process)
+             for (TransitConnection connection : connectionList){
+                 if (vehicle.getPrevStop().equals(connection.getConnectedNode().getID())){
+                     vehicle.setPrevStop(id);
+                     connection.receiveVehicle(vehicle);
+                     return;
+                 }
+             }
+         }
     }
 
     public String getID(){

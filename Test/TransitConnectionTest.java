@@ -100,7 +100,7 @@ class TransitConnectionTest {
     void testReceiveVehiclesAndGetNumberOfWaitingVehicles() {
         connection.receiveVehicle(vehicle1);
         connection.receiveVehicle(vehicle2);
-        assertEquals(2, connection.getNumbOfWaitingVehicles(), "One element should be present");
+        assertEquals(2, connection.getNumbOfWaitingVehicles(), "Two element should be present");
     }
 
 
