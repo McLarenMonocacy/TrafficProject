@@ -50,7 +50,7 @@ public class ArrivalProcess {
     }
 
     private int randIndex(){
-        return (int) Math.round(Math.floor((Math.random()*nodes.size())/(nodes.size())));
+        return (int) Math.round(Math.floor((Math.random()*nodes.size())));
     }
 
 }
