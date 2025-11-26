@@ -7,7 +7,7 @@ public class Commuter {
     private final float startTime;
     private float endTime;
     private float travelDistance;
-    private List<String> path;
+    private final List<String> path;
 
     // Create new commuter with destination and start time
     public Commuter(String destination, float startTime) {

@@ -12,7 +12,7 @@ public class TransitConnection {
         this.waitingVehicles = new LinkedList<>();
     }
 
-    private Queue<Commuter> exitQueue;
+    private final Queue<Commuter> exitQueue;
     private final TransitNode connectedNode;
     private final float distance;
     private final float time;
@@ -35,17 +35,22 @@ public class TransitConnection {
     }
 
     public void departVehicle(){
-        TransitVehicle vehicle = new TransitVehicle(5);
+        if (vehicleReadyToPickup == null){
+            return; //There is no vehicle
+        }
+        currentVehicleWaitTime = Float.MAX_VALUE;
         Commuter commuterToAdd = exitQueue.peek();
         while (commuterToAdd != null) {
-            if (vehicle.addPassenger(commuterToAdd)){
+            if (vehicleReadyToPickup.addPassenger(commuterToAdd)){
                 commuterToAdd.addTravelDistance(distance);
                 exitQueue.poll(); //Commuter was added so remove it from the queue
                 commuterToAdd = exitQueue.peek(); //Get the next commuter to work on
             }
             else break;
         }
-        connectedNode.receiveCommuters(vehicle);
+        connectedNode.receiveCommuters(vehicleReadyToPickup);
+        vehicleReadyToPickup = null;
+        checkIfVehicleCanPickUp();
     }
 
     public void addToQueue(Commuter commuter){
