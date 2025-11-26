@@ -13,7 +13,7 @@ public class CommuterTest {
 
         Commuter commuter = new Commuter(destination, startTime);
 
-        assertEquals(destination, commuter.getDestination(), "Destination should match constructor input");
+        assertEquals(destination, commuter.getDestination(), "Destination should match constructor input ");
         assertEquals(startTime, commuter.getStartTime(), "Start time should match constructor input");
         assertEquals(-1.0f, commuter.getEndTime(), "End time should default to -1.0");
         assertEquals(0.0f, commuter.getTravelDistance(), "Initial distance should be 0.0");
@@ -24,7 +24,7 @@ public class CommuterTest {
         Commuter commuter = new Commuter("End", 10.0f);
 
         //Test before finish
-        assertEquals(-1.0f, commuter.getPassageTime(), "Passage time should be -1.0 if trip is not finished ");
+        assertEquals(-1.0f, commuter.getPassageTime(), "Passage time should be -1.0 if trip is not finished  ");
 
         //Test after finish
         commuter.setEndTime(25.5f);
