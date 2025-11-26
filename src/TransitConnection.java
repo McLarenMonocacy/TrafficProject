@@ -2,6 +2,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TransitConnection {
+    public final static float WAIT_TIME = 5f;
+
     public TransitConnection( TransitNode connectedNode, float distance, float time ){
         this.connectedNode = connectedNode;
         this.distance = distance;
