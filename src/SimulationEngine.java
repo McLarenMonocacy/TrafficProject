@@ -2,6 +2,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public final class SimulationEngine {
+    private enum NodeEventType{
+        NULL_EVENT,
+        TRY_DEPART,
+        ARRIVED
+    }
     private static float currentTime;
     private static float runTime;
     private static TransitMap transitMap;
@@ -38,7 +43,7 @@ public final class SimulationEngine {
             NodeEvent nextNodeEvent = checkNodeEvents();
 
             if (nextNodeEvent == null) {
-                nextNodeEvent = new NodeEvent(Float.MAX_VALUE, 0, null);
+                nextNodeEvent = new NodeEvent(Float.MAX_VALUE, NodeEventType.NULL_EVENT, null);
             }
 
             if (nextArrival < nextNodeEvent.eventTime) {
@@ -46,11 +51,14 @@ public final class SimulationEngine {
                 arrivals.generateNextCommuter();
             } else {
                 switch (nextNodeEvent.eventType) {
-                    case 0: //Vehicle tries to depart
+                    case TRY_DEPART: //Vehicle tries to depart
                         //Check if any more commuters can be picked up
                         //if not do this \/
                         nextNodeEvent.affectedConnection.departVehicle();
                         currentTime = nextNodeEvent.eventTime;
+                        break;
+                    case ARRIVED:
+                        nextNodeEvent.affectedConnection.vehicleReachedDestination();
                         break;
                 }
             }
@@ -81,14 +89,14 @@ public final class SimulationEngine {
                 if (connection.getNumbOfWaitingVehicles() > 0) {
                     float eventTime = connection.getCurrentVehicleDepartTime();
                     if (output == null || eventTime < output.eventTime) {
-                        output = new NodeEvent(eventTime, 0, connection);
+                        output = new NodeEvent(eventTime, NodeEventType.TRY_DEPART, connection);
                     }
                 }
                 //Checks if vehicle reached destination
                 TransitVehicle vehicleInTransit = connection.getVehiclesInTransit().peek();
                 if (vehicleInTransit != null){
                     if (output == null || vehicleInTransit.getArrivalTimeToNextNode() < output.eventTime) {
-                        output = new NodeEvent(vehicleInTransit.getArrivalTimeToNextNode(), 1, connection);
+                        output = new NodeEvent(vehicleInTransit.getArrivalTimeToNextNode(), NodeEventType.ARRIVED, connection);
                     }
                 }
             }
@@ -98,10 +106,10 @@ public final class SimulationEngine {
 
     private static class NodeEvent {
         float eventTime;
-        int eventType;
+        NodeEventType eventType;
         TransitConnection affectedConnection;
 
-        NodeEvent(float eventTime, int eventType, TransitConnection affectedConnection) {
+        NodeEvent(float eventTime, NodeEventType eventType, TransitConnection affectedConnection) {
             this.affectedConnection = affectedConnection;
             this.eventTime = eventTime;
             this.eventType = eventType;
