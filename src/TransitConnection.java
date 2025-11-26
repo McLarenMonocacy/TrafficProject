@@ -13,7 +13,7 @@ public class TransitConnection {
         this.vehiclesInTransit = new LinkedList<>();
     }
 
-    private Queue<Commuter> exitQueue;
+    private final Queue<Commuter> exitQueue;
     private final TransitNode connectedNode;
     private final float distance;
     private final float time;
