@@ -27,7 +27,7 @@ public class ArrivalProcess {
         }
 
         Commuter newCommuter = new Commuter(endNode.getID(), nextArrivalTime);
-        TransitVehicle roboTaxi = new TransitVehicle(1);
+        TransitVehicle roboTaxi = new TransitVehicle(1,"");
         roboTaxi.addPassenger(newCommuter);
         startNode.receiveCommuters(roboTaxi);
 

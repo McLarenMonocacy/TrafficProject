@@ -7,12 +7,17 @@ public class TransitConnection {
         this.distance = distance;
         this.time = time;
         this.exitQueue = new LinkedList<>();
+        this.waitingVehicles = new LinkedList<>();
     }
 
-    Queue<Commuter> exitQueue;
+    private Queue<Commuter> exitQueue;
     private final TransitNode connectedNode;
     private final float distance;
     private final float time;
+
+    private final Queue<TransitVehicle> waitingVehicles;
+    private TransitVehicle vehicleReadyToPickup;
+    private float currentVehicleWaitTime;
 
 
     public float getDistance() {
@@ -43,7 +48,32 @@ public class TransitConnection {
 
     public void addToQueue(Commuter commuter){
         exitQueue.offer(commuter);
-        //TODO: CHANGE: FOR NOW INSTANTLY DEPART THE COMMUTER
-        departVehicle();
+    }
+
+    public void receiveVehicle(TransitVehicle vehicle){
+        waitingVehicles.add(vehicle);
+        checkIfVehicleCanPickUp();
+    }
+
+    private void checkIfVehicleCanPickUp(){
+        //Loads a vehicle to pickup commuters if there isn't already a vehicle doing that
+        if (vehicleReadyToPickup == null && !waitingVehicles.isEmpty()){
+            vehicleReadyToPickup = waitingVehicles.poll();
+            currentVehicleWaitTime = SimulationEngine.getCurrentTime();
+        }
+    }
+
+    public int getNumbOfWaitingVehicles(){
+        if (vehicleReadyToPickup == null){
+            return 0;
+        }
+        else {
+            //Add one to account for the vehicle that is ready to pickup commuters already
+            return waitingVehicles.size() + 1;
+        }
+    }
+
+    public float getCurrentVehicleWaitTime() {
+        return currentVehicleWaitTime;
     }
 }

@@ -3,9 +3,18 @@ import java.util.Queue;
 
 public class TransitVehicle {
     private int maxCapacity;
-    private Queue<Commuter> passengers = new LinkedList<>();
-    public TransitVehicle (int maxCapacity){
+    private Queue<Commuter> passengers;
+    private String prevStop = "";
+    public TransitVehicle (int maxCapacity, String startingStop){
         this.maxCapacity = maxCapacity;
+        passengers = new LinkedList<>();
+        prevStop = startingStop;
+    }
+    public TransitVehicle (int maxCapacity){
+        this(maxCapacity, "");
+    }
+    public TransitVehicle (){
+        this(1);
     }
 
     public boolean addPassenger(Commuter commuter){
@@ -19,5 +28,11 @@ public class TransitVehicle {
         return passengers.poll();
     }
 
-
+    //Get and Set functions
+    public void setPrevStop(String prevStop) {
+        this.prevStop = prevStop;
+    }
+    public String getPrevStop() {
+        return prevStop;
+    }
 }
