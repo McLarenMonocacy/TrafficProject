@@ -3,7 +3,7 @@ import java.util.List;
 
 // Manages arrival of Commuters at a specific transit node
 public class ArrivalProcess {
-    private ExponentialDistribution distribution;
+    private final ExponentialDistribution distribution;
     private float nextArrivalTime;
     private final TransitMap transitMap;
     private List<TransitNode> nodes;
@@ -31,7 +31,7 @@ public class ArrivalProcess {
         roboTaxi.addPassenger(newCommuter);
         startNode.receiveCommuters(roboTaxi);
 
-        nextArrivalTime += distribution.sample();
+        nextArrivalTime += (float) distribution.sample();
     }
 
     // Get when next arrival will occur
