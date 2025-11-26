@@ -18,7 +18,7 @@ public class CSVConversion {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                sb.append(line).append("\n");
+                sb.append(line);
             }
         }
         catch (IOException e){
