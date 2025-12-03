@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="imgui-app-1.90.0-all">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-app-1.90.0-all.jar!/" />
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-app-1.90.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-binding-1.90.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-lwjgl3-1.90.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-app-1.90.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-binding-1.90.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-lwjgl3-1.90.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-app-1.90.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-binding-1.90.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/UI/DownloadedLibraries/java-libraries/imgui-lwjgl3-1.90.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
