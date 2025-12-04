@@ -241,6 +241,7 @@ public class GUI implements GUIInstance {
     private void saveMap(String filename){
         TransitMap outputMap = new TransitMap();
         List<String> usedIDs = new LinkedList<>();
+        //Add node to the map
         for (Model model : scene.getModelMap().values()){
             for (Entity entity : model.getEntitiesList()){
                 if (entity.getClass() == EntityNode.class){
@@ -258,11 +259,11 @@ public class GUI implements GUIInstance {
                 }
             }
         }
+        //Add the connections
         for (Model model : scene.getModelMap().values()){
             for (Entity entity : model.getEntitiesList()){
                 if (entity.getClass() == EntityConnection.class){
                     EntityConnection entityConnection = (EntityConnection) entity;
-                    //This already rejects duplicate connections
                     outputMap.addConnection(entityConnection.getConnection1().getConnectedNode(), entityConnection.getConnection2().getConnectedNode(), entityConnection.getDistance(), entityConnection.getTime());
                 }
             }

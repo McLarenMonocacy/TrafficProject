@@ -16,6 +16,7 @@ public class TransitNode {
 
     public boolean addConnection(TransitNode node, float distance, float time){
         for (TransitConnection connection : connectionList){
+            //Check if the connection already exists
             if (node.getID().equals(connection.getConnectedNode().getID())) return false;
         }
         connectionList.add( new TransitConnection( node, distance, time));
