@@ -43,11 +43,9 @@ public class Window {
         // Create the window
         windowID = GLFW.glfwCreateWindow(windowSize.x, windowSize.y, windowTitle, MemoryUtil.NULL, MemoryUtil.NULL);
         if ( windowID == MemoryUtil.NULL ) throw new RuntimeException("Failed to create the GLFW window");
-        //TODO: MOVED UP HERE BECAUSE IT DOESN'T WORK DOWN THERE ON ARCH LINUX WITH WAYLAND, IDK WHY
-        GLFW.glfwShowWindow(windowID);
         // Set up callbacks
         GLFW.glfwSetKeyCallback(windowID, this::callbackKey);
-        GLFW.glfwSetFramebufferSizeCallback(windowID, this::callbackFrameBufferSize);
+        //GLFW.glfwSetFramebufferSizeCallback(windowID, this::callbackFrameBufferSize);
         GLFW.glfwSetWindowContentScaleCallback(windowID, this::callbackWindowContentScale);
         GLFW.glfwSetErrorCallback(this::callbackError);
 
@@ -70,7 +68,7 @@ public class Window {
         // Enable v-sync based on setting
         GLFW.glfwSwapInterval(vSyncSetting);
         // Show the window
-        //GLFW.glfwShowWindow(windowID);
+        GLFW.glfwShowWindow(windowID);
     }
 
 
