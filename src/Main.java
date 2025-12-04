@@ -6,7 +6,6 @@ public class Main {
 
         TransitMap map = getTransitMap();
 
-        CSVConversion.stringToFile("map.save", map.saveNodes());
         SimulationEngine.init(map.saveNodes(), 999999);
         String outputData = SimulationEngine.run();
         CSVConversion.stringToFile("OUTPUTDATA.TXT", outputData);

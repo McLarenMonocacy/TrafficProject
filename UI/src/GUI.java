@@ -246,6 +246,7 @@ public class GUI implements GUIInstance {
             for (Entity entity : model.getEntitiesList()){
                 if (entity.getClass() == EntityNode.class){
                     EntityNode entityNode = (EntityNode) entity;
+                    entityNode.getNode().getConnections().clear(); // Clears out any old connections as the entityConnections is not stored there
                     String newNodeID = entityNode.getNode().getID();
                     //Check is the node ID was used before, if it was, append additional data to make it unique.
                     for (String usedId : usedIDs){
@@ -265,8 +266,7 @@ public class GUI implements GUIInstance {
             for (Entity entity : model.getEntitiesList()){
                 if (entity.getClass() == EntityConnection.class){
                     EntityConnection entityConnection = (EntityConnection) entity;
-                    boolean test = outputMap.addConnection(entityConnection.getConnection1().getConnectedNode(), entityConnection.getConnection2().getConnectedNode(), entityConnection.getDistance(), entityConnection.getTime());
-                    System.out.println(test);
+                    outputMap.addConnection(entityConnection.getConnection1().getConnectedNode(), entityConnection.getConnection2().getConnectedNode(), entityConnection.getDistance(), entityConnection.getTime());
                 }
             }
         }
