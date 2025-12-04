@@ -251,11 +251,12 @@ public class GUI implements GUIInstance {
                     for (String usedId : usedIDs){
                         if (usedId.equals(newNodeID)){
                             newNodeID += Utils.getUniqueID();
+                            entityNode.getNode().setId(newNodeID); //Node ID is not unique so update it with the new ID
                             break;
                         }
                     }
                     usedIDs.add(newNodeID);
-                    outputMap.addNode(new TransitNode(newNodeID));
+                    outputMap.addNode(entityNode.getNode());
                 }
             }
         }
@@ -264,7 +265,8 @@ public class GUI implements GUIInstance {
             for (Entity entity : model.getEntitiesList()){
                 if (entity.getClass() == EntityConnection.class){
                     EntityConnection entityConnection = (EntityConnection) entity;
-                    outputMap.addConnection(entityConnection.getConnection1().getConnectedNode(), entityConnection.getConnection2().getConnectedNode(), entityConnection.getDistance(), entityConnection.getTime());
+                    boolean test = outputMap.addConnection(entityConnection.getConnection1().getConnectedNode(), entityConnection.getConnection2().getConnectedNode(), entityConnection.getDistance(), entityConnection.getTime());
+                    System.out.println(test);
                 }
             }
         }
