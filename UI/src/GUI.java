@@ -16,7 +16,8 @@ public class GUI implements GUIInstance {
         SUB,
         MOVE,
         CONNECT,
-        QUERY
+        QUERY,
+        SAVE
     }
 
     private class Button {
@@ -86,6 +87,7 @@ public class GUI implements GUIInstance {
         buttons[ButtonID.CONNECT.ordinal()] = new Button(TEXTURE_BUTTON, new ImVec4(0f, 0.75f, 0.25f, 1.00f), new ImVec4(0.25f, 0.75f, 0.50f, 1.00f));
 
         buttons[ButtonID.QUERY.ordinal()] = new Button(TEXTURE_BUTTON, new ImVec4(0.5f, 0.00f, 0.75f, 0.25f), new ImVec4(0.75f, 0.00f, 1f, 0.25f));
+        buttons[ButtonID.SAVE.ordinal()] = new Button(TEXTURE_BUTTON, new ImVec4(0.5f, 0.25f, 0.75f, 0.50f), new ImVec4(0.75f, 0.25f, 1f, 0.50f));
 
     }
 
@@ -132,58 +134,73 @@ public class GUI implements GUIInstance {
                     //Node information
                     EntityNode entity = (EntityNode) queriedEntity;
                     if (queriedEntityChanged) {
-                        queryWindowTextInputField1.set(entity.node.id);
+                        queryWindowTextInputField1.set(entity.node.getID());
                         queriedEntityChanged = false;
                     }
 
-                    ImGui.text("Node id: " + entity.node.id);
+                    ImGui.text("Node id: " + entity.node.getID());
                     //## hides the label
                     if (ImGui.inputText("##NodeID", queryWindowTextInputField1, ImGuiInputTextFlags.EnterReturnsTrue)) {
                         ImGui.setKeyboardFocusHere(-1);
                         if (!queryWindowTextInputField1.get().isEmpty()) { //Ignore empty inputs
-                            entity.node.id = queryWindowTextInputField1.get();
+                            entity.node.setId(queryWindowTextInputField1.get());
                         }
                     }
                 } else if (queriedEntity.getClass() == EntityConnection.class) {
                     //NodeConnection Information
                     EntityConnection entity = (EntityConnection) queriedEntity;
                     if (queriedEntityChanged) {
-                        queryWindowTextInputField1.set(entity.connection1.distance);
-                        queryWindowTextInputField2.set(entity.connection1.travelTime);
+                        queryWindowTextInputField1.set(entity.connection1.getDistance());
+                        queryWindowTextInputField2.set(entity.connection1.getTravelTime());
                         queriedEntityChanged = false;
                     }
 
-                    ImGui.text("Distance: " + entity.connection1.distance);
+                    ImGui.text("Distance: " + entity.connection1.getDistance());
                     if (ImGui.inputText("##Distance", queryWindowTextInputField1, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue)) {
                         ImGui.setKeyboardFocusHere(-1);
-                        if (!queryWindowTextInputField1.get().isEmpty()) { //Empty input get interpreted as 0
+                        if (!queryWindowTextInputField1.get().isEmpty()) { //Empty input gets ignored
                             float newDistance = Float.parseFloat(queryWindowTextInputField1.get());
                             if (newDistance < 0)
                                 newDistance *= -1; //No negative numbers, just remove the negative sign as it is user input
-                            entity.connection1.distance = newDistance;
-                            entity.connection2.distance = newDistance;
-                        } else {
-                            entity.connection1.distance = 0;
-                            entity.connection2.distance = 0;
+                            entity.connection1.setDistance(newDistance);
+                            entity.connection2.setDistance(newDistance);
                         }
                     }
-                    ImGui.text("Travel Time: " + entity.connection1.travelTime);
+                    ImGui.text("Travel Time: " + entity.connection1.getTravelTime());
                     if (ImGui.inputText("##TravelTime", queryWindowTextInputField2, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue)) {
                         ImGui.setKeyboardFocusHere(-1);
-                        if (!queryWindowTextInputField2.get().isEmpty()) { //Empty input get interpreted as 0
+                        if (!queryWindowTextInputField2.get().isEmpty()) { //Empty input gets ignored
                             float newTime = Float.parseFloat(queryWindowTextInputField2.get());
                             if (newTime < 0)
                                 newTime *= -1; //No negative numbers, just remove the negative sign as it is user input
-                            entity.connection1.travelTime = newTime;
-                            entity.connection2.travelTime = newTime;
-                        } else {
-                            entity.connection1.travelTime = 0;
-                            entity.connection2.travelTime = 0;
+                            entity.connection1.setTravelTime(newTime);
+                            entity.connection2.setTravelTime(newTime);
                         }
                     }
                 }
                 ImGui.end();
             }
+        }
+        if (getActiveMode() == ButtonID.SAVE){
+            ImGui.begin("Save Map?", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove);
+            //ImGui.setWindowSize(buttonSize,buttonSize*3);
+            ImGui.setWindowPos(displaySize.x/2, displaySize.y/2);
+            if (ImGui.button("Save slot 1")){
+                saveMap("save1.save");
+            }
+            if (ImGui.button("Save slot 2")){
+                saveMap("save2.save");
+            }
+            if (ImGui.button("Save slot 3")){
+                saveMap("save3.save");
+            }
+            if (ImGui.button("Save slot 4")){
+                saveMap("save4.save");
+            }
+            if (ImGui.button("Save slot 5")){
+                saveMap("save5.save");
+            }
+            ImGui.end();
         }
 
         ImGui.render(); // Calculate the data into drawData
@@ -218,5 +235,8 @@ public class GUI implements GUIInstance {
 
     public void setQueriedEntity (Entity entity){
         queriedEntity = entity;
+    }
+    private void saveMap(String filename){
+
     }
 }

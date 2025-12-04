@@ -24,7 +24,6 @@ public class ProgramLogic{
 
     private GUI gui;
 
-
     public void init(Window window, Scene scene, Renderer renderer){
         gui = new GUI(scene);
 

@@ -10,5 +10,6 @@
     <orderEntry type="library" name="imgui-app-1.90.0-all" level="project" />
     <orderEntry type="library" name="lwjgl-assimp-natives-linux" level="project" />
     <orderEntry type="library" name="joml" level="project" />
+    <orderEntry type="module" module-name="TrafficProject" />
   </component>
 </module>

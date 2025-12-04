@@ -45,7 +45,7 @@ public class Window {
         if ( windowID == MemoryUtil.NULL ) throw new RuntimeException("Failed to create the GLFW window");
         // Set up callbacks
         GLFW.glfwSetKeyCallback(windowID, this::callbackKey);
-        //GLFW.glfwSetFramebufferSizeCallback(windowID, this::callbackFrameBufferSize);
+        GLFW.glfwSetFramebufferSizeCallback(windowID, this::callbackFrameBufferSize);
         GLFW.glfwSetWindowContentScaleCallback(windowID, this::callbackWindowContentScale);
         GLFW.glfwSetErrorCallback(this::callbackError);
 

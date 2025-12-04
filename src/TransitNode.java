@@ -8,7 +8,7 @@ public class TransitNode {
         connectionList = new LinkedList<>();
     }
 
-    private final String id;
+    private String id;
     private final List< TransitConnection > connectionList;
     private Map<String, List<String>> travelTable;
 
@@ -55,6 +55,9 @@ public class TransitNode {
 
     public String getID(){
         return id;
+    }
+    public void setId(String id){
+        this.id = id;
     }
     public List< TransitConnection > getConnections(){
         return connectionList;
