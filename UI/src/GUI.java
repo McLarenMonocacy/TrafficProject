@@ -9,6 +9,8 @@ import imgui.type.ImBoolean;
 import imgui.type.ImString;
 import org.joml.Vector2f;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GUI implements GUIInstance {
     public enum ButtonID {
@@ -29,7 +31,7 @@ public class GUI implements GUIInstance {
         boolean isPressed = false;
 
         Button(String buttonTextureFilePath, ImVec4 offUVs, ImVec4 onUVs) {
-            this.buttonTextureID = textureCache.createTexture(buttonTextureFilePath).getTextureID();
+            this.buttonTextureID = scene.getTextureCache().createTexture(buttonTextureFilePath).getTextureID();
             //Off state
             this.offUV0 = new ImVec2(offUVs.x, offUVs.y);
             this.offUV1 = new ImVec2(offUVs.z, offUVs.w);
@@ -66,7 +68,7 @@ public class GUI implements GUIInstance {
 
     private static final String TEXTURE_BUTTON = "UI/res/texture/button.bmp";
 
-    private final TextureCache textureCache;
+    private final Scene scene;
     private final Button[] buttons = new Button[ButtonID.values().length];
 
     private final ImBoolean showQueryWindow = new ImBoolean(false);
@@ -78,8 +80,9 @@ public class GUI implements GUIInstance {
 
     public GUI(Scene scene) {
         scene.setGuiInstance(this);
-        textureCache = scene.getTextureCache();
+        this.scene = scene;
         Arrays.fill(buttons, null);
+
 
         buttons[ButtonID.ADD.ordinal()] = new Button(TEXTURE_BUTTON, new ImVec4(0f, 0.00f, 0.25f, 0.25f), new ImVec4(0.25f, 0.00f, 0.50f, 0.25f));
         buttons[ButtonID.SUB.ordinal()] = new Button(TEXTURE_BUTTON, new ImVec4(0f, 0.25f, 0.25f, 0.50f), new ImVec4(0.25f, 0.25f, 0.50f, 0.50f));
@@ -134,47 +137,47 @@ public class GUI implements GUIInstance {
                     //Node information
                     EntityNode entity = (EntityNode) queriedEntity;
                     if (queriedEntityChanged) {
-                        queryWindowTextInputField1.set(entity.node.getID());
+                        queryWindowTextInputField1.set(entity.getNode().getID());
                         queriedEntityChanged = false;
                     }
 
-                    ImGui.text("Node id: " + entity.node.getID());
+                    ImGui.text("Node id: " + entity.getNode().getID());
                     //## hides the label
                     if (ImGui.inputText("##NodeID", queryWindowTextInputField1, ImGuiInputTextFlags.EnterReturnsTrue)) {
                         ImGui.setKeyboardFocusHere(-1);
                         if (!queryWindowTextInputField1.get().isEmpty()) { //Ignore empty inputs
-                            entity.node.setId(queryWindowTextInputField1.get());
+                            entity.getNode().setId(queryWindowTextInputField1.get());
                         }
                     }
                 } else if (queriedEntity.getClass() == EntityConnection.class) {
                     //NodeConnection Information
                     EntityConnection entity = (EntityConnection) queriedEntity;
                     if (queriedEntityChanged) {
-                        queryWindowTextInputField1.set(entity.connection1.getDistance());
-                        queryWindowTextInputField2.set(entity.connection1.getTravelTime());
+                        queryWindowTextInputField1.set(entity.getConnection1().getDistance());
+                        queryWindowTextInputField2.set(entity.getConnection1().getTravelTime());
                         queriedEntityChanged = false;
                     }
 
-                    ImGui.text("Distance: " + entity.connection1.getDistance());
+                    ImGui.text("Distance: " + entity.getConnection1().getDistance());
                     if (ImGui.inputText("##Distance", queryWindowTextInputField1, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue)) {
                         ImGui.setKeyboardFocusHere(-1);
                         if (!queryWindowTextInputField1.get().isEmpty()) { //Empty input gets ignored
                             float newDistance = Float.parseFloat(queryWindowTextInputField1.get());
                             if (newDistance < 0)
                                 newDistance *= -1; //No negative numbers, just remove the negative sign as it is user input
-                            entity.connection1.setDistance(newDistance);
-                            entity.connection2.setDistance(newDistance);
+                            entity.getConnection1().setDistance(newDistance);
+                            entity.getConnection2().setDistance(newDistance);
                         }
                     }
-                    ImGui.text("Travel Time: " + entity.connection1.getTravelTime());
+                    ImGui.text("Travel Time: " + entity.getConnection1().getTravelTime());
                     if (ImGui.inputText("##TravelTime", queryWindowTextInputField2, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue)) {
                         ImGui.setKeyboardFocusHere(-1);
                         if (!queryWindowTextInputField2.get().isEmpty()) { //Empty input gets ignored
                             float newTime = Float.parseFloat(queryWindowTextInputField2.get());
                             if (newTime < 0)
                                 newTime *= -1; //No negative numbers, just remove the negative sign as it is user input
-                            entity.connection1.setTravelTime(newTime);
-                            entity.connection2.setTravelTime(newTime);
+                            entity.getConnection1().setTravelTime(newTime);
+                            entity.getConnection2().setTravelTime(newTime);
                         }
                     }
                 }
@@ -183,7 +186,6 @@ public class GUI implements GUIInstance {
         }
         if (getActiveMode() == ButtonID.SAVE){
             ImGui.begin("Save Map?", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove);
-            //ImGui.setWindowSize(buttonSize,buttonSize*3);
             ImGui.setWindowPos(displaySize.x/2, displaySize.y/2);
             if (ImGui.button("Save slot 1")){
                 saveMap("save1.save");
@@ -237,6 +239,34 @@ public class GUI implements GUIInstance {
         queriedEntity = entity;
     }
     private void saveMap(String filename){
-
+        TransitMap outputMap = new TransitMap();
+        List<String> usedIDs = new LinkedList<>();
+        for (Model model : scene.getModelMap().values()){
+            for (Entity entity : model.getEntitiesList()){
+                if (entity.getClass() == EntityNode.class){
+                    EntityNode entityNode = (EntityNode) entity;
+                    String newNodeID = entityNode.getNode().getID();
+                    //Check is the node ID was used before, if it was, append additional data to make it unique.
+                    for (String usedId : usedIDs){
+                        if (usedId.equals(newNodeID)){
+                            newNodeID += Utils.getUniqueID();
+                            break;
+                        }
+                    }
+                    usedIDs.add(newNodeID);
+                    outputMap.addNode(new TransitNode(newNodeID));
+                }
+            }
+        }
+        for (Model model : scene.getModelMap().values()){
+            for (Entity entity : model.getEntitiesList()){
+                if (entity.getClass() == EntityConnection.class){
+                    EntityConnection entityConnection = (EntityConnection) entity;
+                    //This already rejects duplicate connections
+                    outputMap.addConnection(entityConnection.getConnection1().getConnectedNode(), entityConnection.getConnection2().getConnectedNode(), entityConnection.getDistance(), entityConnection.getTime());
+                }
+            }
+        }
+        CSVConversion.stringToFile(filename, outputMap.saveNodes());
     }
 }

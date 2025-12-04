@@ -22,7 +22,7 @@ public class DynamicPathModelCollection {
 
         modelList.add(model);
         scene.addModel(model.getModel());
-        Entity entity = new EntityConnection(ProgramLogic.EntityType.PATH.name(), model.getModelID(), left.node, right.node, 0f, 0f);
+        Entity entity = new EntityConnection(ProgramLogic.EntityType.PATH.name(), model.getModelID(), left.getNode(), right.getNode(), 0f, 0f);
         entity.setTintColor(Utils.randomColor(0.4f,0.9f));
         entityList.add(entity);
         scene.addEntity(entity);
