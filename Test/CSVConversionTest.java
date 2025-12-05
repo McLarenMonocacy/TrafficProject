@@ -16,7 +16,7 @@ class CSVConversionTest {
     @Test
     void FileToString() {
         String line = CSVConversion.fileToString( "TestData/File-to-String-CSV-Test.txt" );
-        assertEquals( "This is a document to test our CSVConversion", line);
+        assertEquals( "This is a document, to test our CSVConversion", line);
     }
 
     @Test

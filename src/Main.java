@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.Map;
 
-public class Main {
+public class  Main {
     public static void main(String[] args) {
 
         TransitMap map = getTransitMap();
@@ -47,4 +47,11 @@ public class Main {
         map.addConnection(node5,node6,1f,1f);
         return map;
     }
+
+    Excelstatistics stats = new Excelstatistics();
+    String templatePath = "Data Stats.xltx";
+    String outputPath = "Excel Generated Stats Result.xlsx";
+
+    stats.writeDataToExcel("OUTPUTDATA.TXT","Excel Generated Stats Result.xlsx");
+
 }
