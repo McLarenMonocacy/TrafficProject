@@ -12,10 +12,8 @@ public class  Main {
         System.out.println(SimulationEngine.finishedCommuters.size());
 
         Excelstatistics stats = new Excelstatistics();
-        String templatePath = "Data Stats.xltx";
-        String outputPath = "Excel Generated Stats Result.xlsx";
 
-        stats.writeDataToExcel("OUTPUTDATA.TXT","Excel Generated Stats Result.xlsx");
+        stats.writeDataToExcel("Data Stats.xltx","Excel Generated Stats Result.xlsx");
 
     }
 
