@@ -1,8 +1,9 @@
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 public class  Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         TransitMap map = getTransitMap();
         SimulationEngine.init(map.saveNodes(), 999999);
@@ -10,6 +11,11 @@ public class  Main {
         CSVConversion.stringToFile("OUTPUTDATA.TXT", outputData);
         System.out.println(SimulationEngine.finishedCommuters.size());
 
+        Excelstatistics stats = new Excelstatistics();
+        String templatePath = "Data Stats.xltx";
+        String outputPath = "Excel Generated Stats Result.xlsx";
+
+        stats.writeDataToExcel("OUTPUTDATA.TXT","Excel Generated Stats Result.xlsx");
 
     }
 
@@ -47,11 +53,5 @@ public class  Main {
         map.addConnection(node5,node6,1f,1f);
         return map;
     }
-
-    Excelstatistics stats = new Excelstatistics();
-    String templatePath = "Data Stats.xltx";
-    String outputPath = "Excel Generated Stats Result.xlsx";
-
-    stats.writeDataToExcel("OUTPUTDATA.TXT","Excel Generated Stats Result.xlsx");
 
 }
