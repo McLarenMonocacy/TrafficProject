@@ -23,6 +23,8 @@ public class TransitMap {
     }
 
     public boolean addConnection(TransitNode node1, TransitNode node2, float distance, float time){
+        if (node1.getID().equals(node2.getID())) return false; //Nodes are the same
+
         boolean node1Exists = false;
         boolean node2Exists = false;
 
