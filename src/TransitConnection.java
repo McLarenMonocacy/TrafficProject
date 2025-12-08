@@ -15,8 +15,8 @@ public class TransitConnection {
 
     private final Queue<Commuter> exitQueue;
     private final TransitNode connectedNode;
-    private final float distance;
-    private final float travelTime;
+    private float distance;
+    private float travelTime;
 
     private final Queue<TransitVehicle> waitingVehicles;
     private TransitVehicle vehicleReadyToPickup;
@@ -109,7 +109,7 @@ public class TransitConnection {
         this.distance = distance;
     }
 
-    public void setTravelTime(float time) {
-        this.time = time;
+    public void setTravelTime(float travelTime) {
+        this.travelTime = travelTime;
     }
 }
