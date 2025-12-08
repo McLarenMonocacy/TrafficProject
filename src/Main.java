@@ -5,8 +5,7 @@ public class Main {
     public static int value = 0;
     public static void main(String[] args) {
 
-        TransitMap map = getTransitMap();
-        SimulationEngine.init(map.saveNodes(), 999999, 1/10f);
+        SimulationEngine.init(CSVConversion.fileToString("save1.save"), 999999, 1/10f);
         String outputData = SimulationEngine.run();
         CSVConversion.stringToFile("OUTPUTDATA.TXT", outputData);
         System.out.println(SimulationEngine.finishedCommuters.size());
@@ -18,6 +17,7 @@ public class Main {
 
 
     private static TransitMap getTransitMap() {
+        //Basic map for dev/debug purpose
         //String[] places = new String[]{"Fairlane","Mark's Burg", "Clown town", "Jolly Rodger bay", "Big apple", "Small apple"};
         String[] places = new String[]{"a","b", "c", "d", "e", "f"};
 

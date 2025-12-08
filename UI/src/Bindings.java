@@ -5,7 +5,7 @@ import org.lwjgl.glfw.GLFW;
 public final class Bindings {
     //Player Settings
     public static float MOUSE_SENSITIVITY = 0.005f;
-    public static float MOVE_SPEED = 3/1000f;
+    public static float MOVE_SPEED = 9/1000f;
 
     //Other Constants
     public static final String TEX_BLANK = "UI/res/texture/white.bmp";
