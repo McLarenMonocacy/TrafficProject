@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         TransitMap map = getTransitMap();
-        SimulationEngine.init(map.saveNodes(), 999999);
+        SimulationEngine.init(map.saveNodes(), 999999, 1/10f);
         String outputData = SimulationEngine.run();
         CSVConversion.stringToFile("OUTPUTDATA.TXT", outputData);
         System.out.println(SimulationEngine.finishedCommuters.size());

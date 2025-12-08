@@ -19,13 +19,13 @@ public final class SimulationEngine {
         throw new RuntimeException("Everything is static so instancing makes no sense");
     }
 
-    public static void init(String nodeData, float runTime) {
+    public static void init(String nodeData, float runTime, float arrivalRate) {
         currentTime = 0;
         SimulationEngine.runTime = runTime;
         finishedCommuters = new LinkedList<>();
         transitMap = TransitMap.loadNodes(nodeData);
         transitMap.genPathTables();
-        arrivals = new ArrivalProcess(1/10f, transitMap);
+        arrivals = new ArrivalProcess(arrivalRate, transitMap);
         wasInitRun = true;
     }
 
