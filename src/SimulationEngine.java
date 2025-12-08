@@ -52,12 +52,16 @@ public final class SimulationEngine {
             } else {
                 switch (nextNodeEvent.eventType) {
                     case TRY_DEPART: //Vehicle tries to depart
+                        currentTime = nextNodeEvent.eventTime;
                         //Check if any more commuters can be picked up
+                        if (nextNodeEvent.affectedConnection.loadCommuterOntoVehicle()){
+                            break;
+                        }
                         //if not do this \/
                         nextNodeEvent.affectedConnection.departVehicle();
-                        currentTime = nextNodeEvent.eventTime;
                         break;
                     case ARRIVED:
+                        currentTime = nextNodeEvent.eventTime;
                         nextNodeEvent.affectedConnection.vehicleReachedDestination();
                         break;
                 }
