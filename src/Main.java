@@ -11,7 +11,6 @@ public class Main {
         CSVConversion.stringToFile("OUTPUTDATA.TXT", outputData);
         System.out.println(SimulationEngine.finishedCommuters.size());
 
-
     }
 
 
