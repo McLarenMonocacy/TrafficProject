@@ -1,4 +1,3 @@
-import java.util.LinkedList;
 import java.util.List;
 
 // Manages arrival of Commuters at a specific transit node
@@ -7,6 +6,7 @@ public class ArrivalProcess {
     private float nextArrivalTime;
     private final TransitMap transitMap;
     private List<TransitNode> nodes;
+    private int incrementingID;
 
     // Constructor with arrival rate and node IDs
     public ArrivalProcess(double lambda, TransitMap map) {
@@ -14,6 +14,7 @@ public class ArrivalProcess {
         this.transitMap = map;
         genNodeList();
         this.nextArrivalTime = 0.0f; // First arrival at time 0
+        incrementingID = 1;
     }
 
     // Generate next commuter and update next arrival time
@@ -26,7 +27,7 @@ public class ArrivalProcess {
             endNode = nodes.get(randIndex());
         }
 
-        Commuter newCommuter = new Commuter(endNode.getID(), nextArrivalTime);
+        Commuter newCommuter = new Commuter(endNode.getID(), nextArrivalTime, incrementingID++);
         TransitVehicle roboTaxi = new TransitVehicle(1,"");
         roboTaxi.addPassenger(newCommuter);
         startNode.receiveCommuters(roboTaxi);

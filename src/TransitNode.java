@@ -25,6 +25,7 @@ public class TransitNode {
 
     public void receiveCommuters( TransitVehicle vehicle ){
         Commuter commuter = null;
+        //Unloads all the commuters
          while ( (commuter = vehicle.removePassenger()) != null ){
              commuter.advancePath(id);
              if (commuter.getDestination().equals(id)){ //This is the commuters destination
@@ -43,6 +44,7 @@ public class TransitNode {
             }
         }
 
+         //Send the vehicle to the proper TransitConnection
          if (!vehicle.getPrevStop().isEmpty()){ //This should reject all vehicles that didn't come from a node (aka the arrival process)
              for (TransitConnection connection : connectionList){
                  if (vehicle.getPrevStop().equals(connection.getConnectedNode().getID())){

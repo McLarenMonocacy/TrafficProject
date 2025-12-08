@@ -2,24 +2,26 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TransitConnection {
-    public final static float WAIT_TIME = 5f;
+    private static final float WAIT_TIME = .5f;
 
-    public TransitConnection( TransitNode connectedNode, float distance, float time ){
+    public TransitConnection( TransitNode connectedNode, float distance, float travelTime){
         this.connectedNode = connectedNode;
         this.distance = distance;
-        this.time = time;
+        this.travelTime = travelTime;
         this.exitQueue = new LinkedList<>();
         this.waitingVehicles = new LinkedList<>();
+        this.vehiclesInTransit = new LinkedList<>();
     }
 
     private final Queue<Commuter> exitQueue;
     private final TransitNode connectedNode;
     private float distance;
-    private float time;
+    private float travelTime;
 
     private final Queue<TransitVehicle> waitingVehicles;
     private TransitVehicle vehicleReadyToPickup;
-    private float currentVehicleWaitTime;
+    private float currentVehicleDepartTime;
+    private final Queue<TransitVehicle> vehiclesInTransit;
 
 
     public float getDistance() {
@@ -27,30 +29,45 @@ public class TransitConnection {
     }
 
     public float getTravelTime() {
-        return time;
+        return travelTime;
     }
 
     public TransitNode getConnectedNode() {
         return connectedNode;
     }
 
-    public void departVehicle(){
+    public boolean loadCommuterOntoVehicle(){
+        //Returns true if at least one commuter boarded the vehicle
         if (vehicleReadyToPickup == null){
-            return; //There is no vehicle
+            return false; //There is no vehicle
         }
-        currentVehicleWaitTime = Float.MAX_VALUE;
+        boolean output = false;
         Commuter commuterToAdd = exitQueue.peek();
         while (commuterToAdd != null) {
             if (vehicleReadyToPickup.addPassenger(commuterToAdd)){
                 commuterToAdd.addTravelDistance(distance);
                 exitQueue.poll(); //Commuter was added so remove it from the queue
+                currentVehicleDepartTime += WAIT_TIME;
+                output = true;
                 commuterToAdd = exitQueue.peek(); //Get the next commuter to work on
             }
             else break;
         }
-        connectedNode.receiveCommuters(vehicleReadyToPickup);
+        return output;
+    }
+    public void departVehicle(){
+        if (vehicleReadyToPickup == null){
+            System.out.println("WE SHOULDN'T BE HERE");
+            return; //There is no vehicle
+        }
+        currentVehicleDepartTime = Float.MAX_VALUE;
+        vehicleReadyToPickup.setArrivalTimeToNextNode(SimulationEngine.getCurrentTime() + travelTime);
+        vehiclesInTransit.add(vehicleReadyToPickup);
         vehicleReadyToPickup = null;
         checkIfVehicleCanPickUp();
+    }
+    public void vehicleReachedDestination(){
+        connectedNode.receiveCommuters(vehiclesInTransit.poll());
     }
 
     public void addToQueue(Commuter commuter){
@@ -66,7 +83,7 @@ public class TransitConnection {
         //Loads a vehicle to pickup commuters if there isn't already a vehicle doing that
         if (vehicleReadyToPickup == null && !waitingVehicles.isEmpty()){
             vehicleReadyToPickup = waitingVehicles.poll();
-            currentVehicleWaitTime = SimulationEngine.getCurrentTime();
+            currentVehicleDepartTime = SimulationEngine.getCurrentTime();
         }
     }
 
@@ -80,15 +97,19 @@ public class TransitConnection {
         }
     }
 
-    public float getCurrentVehicleWaitTime() {
-        return currentVehicleWaitTime;
+    public float getCurrentVehicleDepartTime() {
+        return currentVehicleDepartTime;
+    }
+
+    public Queue<TransitVehicle> getVehiclesInTransit() {
+        return vehiclesInTransit;
     }
 
     public void setDistance(float distance){
         this.distance = distance;
     }
 
-    public void setTravelTime(float time) {
-        this.time = time;
+    public void setTravelTime(float travelTime) {
+        this.travelTime = travelTime;
     }
 }

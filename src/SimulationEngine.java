@@ -2,6 +2,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public final class SimulationEngine {
+    private enum NodeEventType{
+        NULL_EVENT,
+        TRY_DEPART,
+        ARRIVED
+    }
     private static float currentTime;
     private static float runTime;
     private static TransitMap transitMap;
@@ -14,13 +19,13 @@ public final class SimulationEngine {
         throw new RuntimeException("Everything is static so instancing makes no sense");
     }
 
-    public static void init(String nodeData, float runTime) {
+    public static void init(String nodeData, float runTime, float arrivalRate) {
         currentTime = 0;
         SimulationEngine.runTime = runTime;
         finishedCommuters = new LinkedList<>();
         transitMap = TransitMap.loadNodes(nodeData);
         transitMap.genPathTables();
-        arrivals = new ArrivalProcess(1, transitMap);
+        arrivals = new ArrivalProcess(arrivalRate, transitMap);
         wasInitRun = true;
     }
 
@@ -38,7 +43,7 @@ public final class SimulationEngine {
             NodeEvent nextNodeEvent = checkNodeEvents();
 
             if (nextNodeEvent == null) {
-                nextNodeEvent = new NodeEvent(Float.MAX_VALUE, 0, null);
+                nextNodeEvent = new NodeEvent(Float.MAX_VALUE, NodeEventType.NULL_EVENT, null);
             }
 
             if (nextArrival < nextNodeEvent.eventTime) {
@@ -46,9 +51,18 @@ public final class SimulationEngine {
                 arrivals.generateNextCommuter();
             } else {
                 switch (nextNodeEvent.eventType) {
-                    case 0:
-                        nextNodeEvent.affectedConnection.departVehicle();
+                    case TRY_DEPART: //Vehicle tries to depart
                         currentTime = nextNodeEvent.eventTime;
+                        //Check if any more commuters can be picked up
+                        if (nextNodeEvent.affectedConnection.loadCommuterOntoVehicle()){
+                            break;
+                        }
+                        //if not do this \/
+                        nextNodeEvent.affectedConnection.departVehicle();
+                        break;
+                    case ARRIVED:
+                        currentTime = nextNodeEvent.eventTime;
+                        nextNodeEvent.affectedConnection.vehicleReachedDestination();
                         break;
                 }
             }
@@ -57,7 +71,7 @@ public final class SimulationEngine {
         StringBuilder outputData = new StringBuilder();
         for (Commuter commuter : finishedCommuters) {
             float commuterTime = commuter.getEndTime() - commuter.getStartTime();
-            outputData.append(String.format("%.2f", commuterTime)).append(",");
+            outputData.append(commuter.getId()).append(',').append(String.format("%.2f", commuter.getStartTime())).append(',').append(String.format("%.2f", commuterTime)).append(',');
             for (String path : commuter.getPath()) {
                 outputData.append(path).append(",");
             }
@@ -75,12 +89,18 @@ public final class SimulationEngine {
         NodeEvent output = null;
         for (TransitNode node : transitMap.getNodes()) {
             for (TransitConnection connection : node.getConnections()) {
+                //Checks if vehicle can depart
                 if (connection.getNumbOfWaitingVehicles() > 0) {
-                    float eventTime = connection.getCurrentVehicleWaitTime() + TransitConnection.WAIT_TIME;
-                    if (output == null) {
-                        output = new NodeEvent(eventTime, 0, connection);
-                    } else if (eventTime < output.eventTime) {
-                        output = new NodeEvent(eventTime, 0, connection);
+                    float eventTime = connection.getCurrentVehicleDepartTime();
+                    if (output == null || eventTime < output.eventTime) {
+                        output = new NodeEvent(eventTime, NodeEventType.TRY_DEPART, connection);
+                    }
+                }
+                //Checks if vehicle reached destination
+                TransitVehicle vehicleInTransit = connection.getVehiclesInTransit().peek();
+                if (vehicleInTransit != null){
+                    if (output == null || vehicleInTransit.getArrivalTimeToNextNode() < output.eventTime) {
+                        output = new NodeEvent(vehicleInTransit.getArrivalTimeToNextNode(), NodeEventType.ARRIVED, connection);
                     }
                 }
             }
@@ -90,10 +110,10 @@ public final class SimulationEngine {
 
     private static class NodeEvent {
         float eventTime;
-        int eventType;
+        NodeEventType eventType;
         TransitConnection affectedConnection;
 
-        NodeEvent(float eventTime, int eventType, TransitConnection affectedConnection) {
+        NodeEvent(float eventTime, NodeEventType eventType, TransitConnection affectedConnection) {
             this.affectedConnection = affectedConnection;
             this.eventTime = eventTime;
             this.eventType = eventType;

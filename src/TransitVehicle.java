@@ -5,6 +5,8 @@ public class TransitVehicle {
     private int maxCapacity;
     private Queue<Commuter> passengers;
     private String prevStop = "";
+    private float arrivalTimeToNextNode = Float.MAX_VALUE;
+
     public TransitVehicle (int maxCapacity, String startingStop){
         this.maxCapacity = maxCapacity;
         passengers = new LinkedList<>();
@@ -34,5 +36,13 @@ public class TransitVehicle {
     }
     public String getPrevStop() {
         return prevStop;
+    }
+
+    public void setArrivalTimeToNextNode(float time){
+        arrivalTimeToNextNode = time;
+    }
+
+    public float getArrivalTimeToNextNode() {
+        return arrivalTimeToNextNode;
     }
 }
