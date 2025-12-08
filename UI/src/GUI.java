@@ -270,6 +270,6 @@ public class GUI implements GUIInstance {
                 }
             }
         }
-        CSVConversion.stringToFile(filename, outputMap.saveNodes());
+        FileStringConversion.stringToFile(filename, outputMap.saveNodes());
     }
 }

@@ -1,13 +1,10 @@
-import java.util.List;
-import java.util.Map;
-
 public class Main {
     public static int value = 0;
     public static void main(String[] args) {
 
-        SimulationEngine.init(CSVConversion.fileToString("save1.save"), 999999, 1/10f);
+        SimulationEngine.init(FileStringConversion.fileToString("save1.save"), 999999, 1/10f);
         String outputData = SimulationEngine.run();
-        CSVConversion.stringToFile("OUTPUTDATA.TXT", outputData);
+        FileStringConversion.stringToFile("OUTPUTDATA.TXT", outputData);
         System.out.println(SimulationEngine.finishedCommuters.size());
 
     }

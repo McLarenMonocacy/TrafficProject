@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class CSVConversion {
+public class FileStringConversion {
 
     // raw text to file
     public static void stringToFile(String fileName, String content) {
@@ -18,7 +18,7 @@ public class CSVConversion {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                sb.append(line);
+                sb.append(line).append("\n");
             }
         }
         catch (IOException e){
