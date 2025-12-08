@@ -8,14 +8,20 @@ public class Commuter {
     private float endTime;
     private float travelDistance;
     private final List<String> path;
+    private final int id;
 
     // Create new commuter with destination and start time
-    public Commuter(String destination, float startTime) {
+    public Commuter(String destination, float startTime, int id) {
         this.destination = destination;
         this.startTime = startTime;
         this.endTime = -1.0f; // Not yet finished
         this.travelDistance = 0.0f;
         this.path = new LinkedList<>();
+        this.id = id;
+    }
+
+    public Commuter(String destination, float startTime){
+        this(destination,startTime,0);
     }
 
     // Record when commuter finishes
@@ -54,6 +60,9 @@ public class Commuter {
         return endTime - startTime;
     }
 
+    public int getId() {
+        return id;
+    }
 
     public void advancePath(String node){
         path.add(node);

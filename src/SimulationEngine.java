@@ -71,7 +71,7 @@ public final class SimulationEngine {
         StringBuilder outputData = new StringBuilder();
         for (Commuter commuter : finishedCommuters) {
             float commuterTime = commuter.getEndTime() - commuter.getStartTime();
-            outputData.append(String.format("%.2f", commuterTime)).append(",");
+            outputData.append(commuter.getId()).append(',').append(String.format("%.2f", commuter.getStartTime())).append(',').append(String.format("%.2f", commuterTime)).append(',');
             for (String path : commuter.getPath()) {
                 outputData.append(path).append(",");
             }
