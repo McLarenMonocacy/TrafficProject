@@ -8,7 +8,7 @@ public class TransitNode {
         connectionList = new LinkedList<>();
     }
 
-    private final String id;
+    private String id;
     private final List< TransitConnection > connectionList;
     private Map<String, List<String>> travelTable;
 
@@ -16,6 +16,7 @@ public class TransitNode {
 
     public boolean addConnection(TransitNode node, float distance, float time){
         for (TransitConnection connection : connectionList){
+            //Check if the connection already exists
             if (node.getID().equals(connection.getConnectedNode().getID())) return false;
         }
         connectionList.add( new TransitConnection( node, distance, time));
@@ -57,6 +58,9 @@ public class TransitNode {
 
     public String getID(){
         return id;
+    }
+    public void setId(String id){
+        this.id = id;
     }
     public List< TransitConnection > getConnections(){
         return connectionList;

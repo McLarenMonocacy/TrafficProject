@@ -104,4 +104,12 @@ public class TransitConnection {
     public Queue<TransitVehicle> getVehiclesInTransit() {
         return vehiclesInTransit;
     }
+
+    public void setDistance(float distance){
+        this.distance = distance;
+    }
+
+    public void setTravelTime(float time) {
+        this.time = time;
+    }
 }
