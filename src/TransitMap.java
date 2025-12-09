@@ -93,7 +93,9 @@ public class TransitMap {
         CalcPathClass newPath = new CalcPathClass();
         newPath.addNodeToPath(startNode.getID(), 0f);
         CalcPathClass calcPath = calcShortestPath(newPath, startNode, targetNodeID);
-        if (calcPath == null) throw new RuntimeException("Couldn't path to node");
+        if (calcPath == null){
+            throw new RuntimeException("Couldn't path to node");
+        }
         return calcPath.path;
     }
 
