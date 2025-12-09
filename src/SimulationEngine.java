@@ -30,6 +30,7 @@ public final class SimulationEngine {
     }
 
     static String run() {
+        System.out.println("Starting simulation");
         if (!wasInitRun) throw new RuntimeException("Init was never ran");
         for (TransitNode node : transitMap.getNodes()) {
             for (TransitConnection connection : node.getConnections()) {
@@ -71,7 +72,8 @@ public final class SimulationEngine {
         StringBuilder outputData = new StringBuilder();
         for (Commuter commuter : finishedCommuters) {
             float commuterTime = commuter.getEndTime() - commuter.getStartTime();
-            outputData.append(commuter.getId()).append(',').append(String.format("%.2f", commuter.getStartTime())).append(',').append(String.format("%.2f", commuterTime)).append(',');
+            //Commuter ID, Start time, End time, Time diff, Distance
+            outputData.append(commuter.getId()).append(',').append(String.format("%.2f", commuter.getStartTime())).append(',').append(String.format("%.2f", commuter.getEndTime())).append(',').append(String.format("%.2f", commuterTime)).append(',').append(String.format("%.2f", commuter.getTravelDistance())).append(',');
             for (String path : commuter.getPath()) {
                 outputData.append(path).append(",");
             }
