@@ -84,6 +84,7 @@ public class TransitMap {
                 travelTable.put(destNode.getID(),calcShortestPath(startNode, destNode.getID()));
             }
             startNode.setTravelTable(travelTable); // store the travel table in the node
+            System.out.println("Finished travel table for " + startNode.getID());
             pathTables.put(startNode.getID(), travelTable);
         }
         return pathTables;
